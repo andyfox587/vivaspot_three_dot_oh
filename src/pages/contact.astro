@@ -1,0 +1,597 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Contact Us - Get in Touch">
+  <!-- Hero Section -->
+  <section class="contact-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <span class="hero-tag">Contact</span>
+      <h1 class="hero-title">Let's start a conversation</h1>
+      <p class="hero-subtitle">
+        Ready to transform your guest WiFi into a marketing machine? We're here to help.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Content -->
+  <section class="contact-section">
+    <div class="contact-container">
+      <div class="contact-grid">
+        <!-- Contact Form -->
+        <div class="contact-form-wrapper">
+          <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="contact-form">
+            <div class="form-group">
+              <label for="name" class="form-label">Your Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="form-input"
+                placeholder="John Smith"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="form-input"
+                placeholder="john@example.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone" class="form-label">Phone Number <span class="optional">(optional)</span></label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="form-input"
+                placeholder="(555) 123-4567"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="company" class="form-label">Company Name <span class="optional">(optional)</span></label>
+              <input
+                type="text"
+                id="company"
+                name="company"
+                class="form-input"
+                placeholder="Your Business"
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="message" class="form-label">How can we help?</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                class="form-input form-textarea"
+                placeholder="Tell us about your WiFi marketing goals..."
+              ></textarea>
+            </div>
+
+            <button type="submit" class="form-submit">
+              Send Message
+              <svg viewBox="0 0 20 20" fill="currentColor" class="submit-icon">
+                <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z" />
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <div class="info-card">
+            <div class="info-icon email-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </div>
+            <div class="info-content">
+              <h3 class="info-title">Email Us</h3>
+              <p class="info-text">Drop us a line anytime</p>
+              <a href="mailto:support@vivaspot.com" class="info-link">support@vivaspot.com</a>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon phone-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </div>
+            <div class="info-content">
+              <h3 class="info-title">Call Us</h3>
+              <p class="info-text">Mon-Fri 9am-5pm EST</p>
+              <a href="tel:1-855-383-4662" class="info-link">1-855-383-4662</a>
+            </div>
+          </div>
+
+          <div class="info-card demo-card">
+            <div class="info-icon demo-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+            </div>
+            <div class="info-content">
+              <h3 class="info-title">Book a Demo</h3>
+              <p class="info-text">See VivaSpot in action with a personalized walkthrough</p>
+              <a
+                href="https://calendly.com/vivaspot"
+                target="_blank"
+                rel="noopener"
+                class="demo-btn"
+              >
+                Schedule Demo
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="social-section">
+            <p class="social-label">Follow us</p>
+            <div class="social-links">
+              <a href="https://facebook.com/vivaspot" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3V2z" />
+                </svg>
+              </a>
+              <a href="https://twitter.com/vivaspot" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0 0 23 3z" />
+                </svg>
+              </a>
+              <a href="https://linkedin.com/company/vivaspot" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero Section */
+  .contact-hero {
+    position: relative;
+    background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
+    padding: 3rem 0 2rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 30% 20%, rgba(230, 74, 25, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, rgba(230, 74, 25, 0.04) 0%, transparent 40%);
+  }
+
+  .hero-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange-500);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease 0.1s forwards;
+    opacity: 0;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    color: var(--charcoal-light);
+    max-width: 500px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  /* Contact Section */
+  .contact-section {
+    background: var(--cream);
+    padding: 2rem 0 4rem;
+  }
+
+  .contact-container {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media (min-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Contact Form */
+  .contact-form-wrapper {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+    animation: fadeInUp 0.6s ease 0.3s forwards;
+    opacity: 0;
+  }
+
+  .contact-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .contact-form {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-label {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .optional {
+    font-weight: 400;
+    color: var(--charcoal-light);
+  }
+
+  .form-input {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    padding: 0.875rem 1rem;
+    background: var(--cream);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    color: var(--charcoal);
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .form-input::placeholder {
+    color: var(--charcoal-light);
+    opacity: 0.6;
+  }
+
+  .form-input:focus {
+    border-color: var(--orange-500);
+    box-shadow: 0 0 0 3px rgba(230, 74, 25, 0.1);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .form-submit {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    background: var(--orange-500);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(230, 74, 25, 0.3);
+  }
+
+  .form-submit:hover {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 74, 25, 0.4);
+  }
+
+  .submit-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Contact Info */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .info-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 16px;
+    animation: fadeInUp 0.5s ease calc(0.4s + var(--i, 0) * 0.1s) forwards;
+    opacity: 0;
+  }
+
+  .info-card:nth-child(1) { --i: 0; }
+  .info-card:nth-child(2) { --i: 1; }
+  .info-card:nth-child(3) { --i: 2; }
+
+  .info-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  .info-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .email-icon {
+    background: rgba(230, 74, 25, 0.1);
+    color: var(--orange-500);
+  }
+
+  .phone-icon {
+    background: rgba(44, 62, 80, 0.1);
+    color: var(--charcoal);
+  }
+
+  .demo-icon {
+    background: rgba(230, 74, 25, 0.1);
+    color: var(--orange-500);
+  }
+
+  .info-content {
+    flex: 1;
+  }
+
+  .info-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.25rem;
+  }
+
+  .info-text {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--charcoal-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .info-link {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--orange-500);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .info-link:hover {
+    color: var(--orange-700);
+  }
+
+  .demo-card {
+    background: var(--charcoal);
+  }
+
+  .demo-card .info-icon {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--orange-500);
+  }
+
+  .demo-card .info-title {
+    color: white;
+  }
+
+  .demo-card .info-text {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--orange-500);
+    text-decoration: none;
+    transition: gap 0.3s ease;
+  }
+
+  .demo-btn:hover {
+    gap: 0.625rem;
+  }
+
+  .demo-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Social Links */
+  .social-section {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 16px;
+    animation: fadeInUp 0.5s ease 0.7s forwards;
+    opacity: 0;
+  }
+
+  .social-label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--charcoal-light);
+    margin-bottom: 1rem;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--cream);
+    border-radius: 12px;
+    color: var(--charcoal-light);
+    transition: all 0.3s ease;
+  }
+
+  .social-link:hover {
+    background: var(--orange-500);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .social-link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Demo banner */
+  .demo-banner {
+    background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    padding: 0.875rem 1.5rem;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    animation: slideDown 0.4s ease;
+  }
+
+  .demo-banner strong {
+    font-weight: 700;
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Highlight prefilled field */
+  .form-input.prefilled {
+    background: #f0fdf4;
+    border-color: #22c55e;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDemo = urlParams.get('demo') === 'true';
+    const storedEmail = localStorage.getItem('vivaspot_demo_email');
+
+    if (isDemo && storedEmail) {
+      // Prefill the email field
+      const emailInput = document.getElementById('email') as HTMLInputElement;
+      const nameInput = document.getElementById('name') as HTMLInputElement;
+
+      if (emailInput) {
+        emailInput.value = storedEmail;
+        emailInput.classList.add('prefilled');
+      }
+
+      // Focus the name field
+      if (nameInput) {
+        setTimeout(() => {
+          nameInput.focus();
+        }, 500); // Small delay for animation to complete
+      }
+
+      // Clear the stored email
+      localStorage.removeItem('vivaspot_demo_email');
+    }
+  });
+</script>

@@ -1,0 +1,2096 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import OptimizedImage from '../components/OptimizedImage.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+// Get CMS content
+const homepageEntries = await getCollection('homepage');
+const homepage = homepageEntries[0]?.data;
+
+const testimonialEntries = await getCollection('testimonials');
+const testimonials = testimonialEntries
+  .filter(t => t.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(t => ({
+    quote: t.data.quote,
+    author: t.data.author,
+    role: t.data.role,
+    company: t.data.business,
+    logo: t.data.logo,
+  }));
+
+const allPosts = await getCollection('blog');
+// Only show published posts
+const recentPosts = allPosts
+  .filter(p => p.data.published)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+// How It Works: 3-step flow (with images that aren't in CMS yet)
+const howItWorksSteps = homepage?.howItWorks?.steps || [];
+const howItWorks = howItWorksSteps.map((step: { number: string; title: string; description: string }, i: number) => ({
+  step: parseInt(step.number) || i + 1,
+  title: step.title,
+  headline: step.title,
+  description: step.description,
+  image: `/images/step-${['collect', 'connect', 'convert'][i] || 'collect'}.png`,
+  imageAlt: step.title,
+}));
+
+// Feature items from CMS
+const featureItems = homepage?.features?.items || [];
+
+// Feature spotlight (keeping static for now as it's a specific section)
+const spotlight = {
+  headline: 'Comprehensive Reporting',
+  subheadline: 'See What\'s Working',
+  description: 'Track campaign performance, measure ROI, and get AI-powered insights to optimize your marketing. From open rates to revenue attribution—see exactly how your WiFi drives results.',
+  image: '/images/feature-reporting.png',
+  imageAlt: 'Analytics dashboard showing marketing metrics',
+  stats: homepage?.stats || [
+    { value: '35%', label: 'Avg. open rate' },
+    { value: '12x', label: 'ROI on campaigns' },
+    { value: '2.3x', label: 'More return visits' },
+  ],
+};
+
+const integrations = [
+  { name: 'Mailchimp', logo: '/images/wp-content/uploads/2024/08/mailchimp-logo-for-website.png' },
+  { name: 'Clover', logo: '/images/wp-content/uploads/2024/08/clover-logo.png' },
+  { name: 'Cisco Meraki', logo: '/images/wp-content/uploads/2024/08/cisco-meraki-logo.png' },
+  { name: 'Ubiquiti', logo: '/images/wp-content/uploads/2024/08/Ubiquiti_Logo.png' },
+];
+
+// Get CMS values with fallbacks
+const hero = homepage?.hero || {
+  headline: 'Turn Guest WiFi Into Your Marketing Autopilot',
+  subheadline: 'Capture customer contacts, automate marketing campaigns, and drive repeat visits—all through the WiFi your guests are already using.',
+  ctaPrimary: 'Start Free Trial',
+  ctaPrimaryLink: '/contact',
+  ctaSecondary: 'View Pricing',
+  ctaSecondaryLink: '/pricing',
+};
+
+const finalCta = homepage?.finalCta || {
+  headline: 'Ready to Transform Your Guest WiFi?',
+  subheadline: 'Join hundreds of businesses using VivaSpot to capture leads, build loyalty, and drive revenue.',
+  buttonText: 'Start Your Free Trial',
+  buttonLink: '/contact',
+};
+---
+
+<BaseLayout title="Guest WiFi Marketing & Automation">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-backdrop">
+      <img
+        src="/images/hero-cafe-illustration.png"
+        alt=""
+        class="hero-backdrop-img"
+      />
+      <div class="hero-backdrop-fade"></div>
+    </div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <span class="hero-badge">WiFi Marketing Platform</span>
+        <h1 class="hero-headline">
+          Turn Guest WiFi<br />
+          <span class="headline-accent">Into Your Marketing</span><br />
+          Autopilot
+        </h1>
+        <p class="hero-description">
+          {hero.subheadline}
+        </p>
+        <div class="hero-actions desktop-only">
+          <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+          <a href={hero.ctaPrimaryLink} class="btn-text">
+            Or start your free trial
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone-device">
+          <div class="phone-frame">
+            <div class="dynamic-island"></div>
+
+            <!-- Persistent WiFi Icon (stays in place during transition) -->
+            <div class="wifi-icon-wrap" id="wifi-icon-wrap">
+              <svg class="wifi-icon" id="wifi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path class="wifi-bar wifi-bar-3" d="M1.42 9a16 16 0 0 1 21.16 0" />
+                <path class="wifi-bar wifi-bar-2" d="M5 12.55a11 11 0 0 1 14.08 0" />
+                <path class="wifi-bar wifi-bar-1" d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                <circle class="wifi-dot" cx="12" cy="20" r="1.5" fill="currentColor" />
+              </svg>
+              <!-- Checkmark overlay for connected state -->
+              <svg class="wifi-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+
+            <!-- Screen 1: WiFi Portal content (initial state) -->
+            <div class="wifi-portal" id="wifi-portal">
+              <p class="portal-title" id="portal-title">Welcome to Free WiFi</p>
+              <p class="portal-subtitle" id="portal-subtitle">Enter your email to connect</p>
+              <form id="wifi-form">
+                <input
+                  type="email"
+                  id="wifi-email"
+                  placeholder="you@example.com"
+                  class="portal-input"
+                  required
+                />
+                <button type="submit" class="portal-btn" id="portal-btn">
+                  <span class="btn-text">Connect Now</span>
+                  <span class="btn-spinner"></span>
+                </button>
+              </form>
+              <p class="portal-legal" id="portal-legal">By connecting, you agree to receive offers</p>
+            </div>
+
+            <!-- Screen 2: Lead Captured content (revealed after animation) -->
+            <div class="lead-captured" id="lead-captured">
+              <p class="captured-title">Lead Captured!</p>
+              <p class="captured-subtitle">That's how easy it is.</p>
+              <p class="captured-email" id="captured-email">email@example.com</p>
+              <button class="captured-btn" id="captured-btn">Get this for YOUR business →</button>
+              <p class="captured-footer">No credit card required</p>
+            </div>
+
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+        <div class="floating-stat stat-emails" id="stat-emails">
+          <span class="stat-num" id="stat-num">2,847</span>
+          <span class="stat-text">emails this week</span>
+        </div>
+        <div class="floating-stat stat-rate">
+          <span class="stat-num">94%</span>
+          <span class="stat-text">open rate</span>
+        </div>
+      </div>
+      <div class="hero-actions mobile-only">
+        <a href={hero.ctaPrimaryLink} class="btn-primary-mobile">Start Free Trial</a>
+        <a href="#how-it-works" class="btn-secondary-mobile">See How It Works</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stats-inner">
+        <div class="stat-block">
+          <span class="stat-value">500+</span>
+          <span class="stat-label">Businesses</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-block">
+          <span class="stat-value">50+</span>
+          <span class="stat-label">Integrations</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-block">
+          <span class="stat-value">5 min</span>
+          <span class="stat-label">Setup</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-block">
+          <span class="stat-value">Free</span>
+          <span class="stat-label">To Start</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="how-it-works-container">
+      <div class="how-it-works-header">
+        <span class="section-tag">{homepage?.howItWorks?.headline || 'How It Works'}</span>
+        <h2 class="section-headline">{homepage?.howItWorks?.subheadline || 'Three Steps to Marketing Autopilot'}</h2>
+      </div>
+
+      <div class="steps-flow">
+        {howItWorks.map((step, i) => (
+          <div class="step-card" data-animate style={`--delay: ${i * 0.15}s`}>
+            <div class="step-number">{step.step}</div>
+            <div class="step-image">
+              <img src={step.image} alt={step.imageAlt} loading="lazy" />
+            </div>
+            <div class="step-content">
+              <span class="step-title">{step.title}</span>
+              <h3 class="step-headline">{step.headline}</h3>
+              <p class="step-description">{step.description}</p>
+            </div>
+            {i < howItWorks.length - 1 && (
+              <div class="step-connector">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Highlights -->
+  <section class="features">
+    <div class="features-container">
+      <div class="features-header">
+        <span class="section-tag">{homepage?.features?.tagline || 'Powerful Features'}</span>
+        <h2 class="section-headline">{homepage?.features?.headline || 'More Than Just WiFi'}</h2>
+        <a href="/features" class="features-link">Explore all features →</a>
+      </div>
+      <div class="features-grid">
+        {featureItems.length > 0 ? (
+          featureItems.map((feature: { stat: string; title: string; description: string }) => (
+            <div class="feature-card">
+              <div class="feature-stat">{feature.stat}</div>
+              <div class="feature-content">
+                <h3 class="feature-title">{feature.title}</h3>
+                <p class="feature-desc">{feature.description}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <>
+            <div class="feature-card">
+              <div class="feature-stat">98%</div>
+              <div class="feature-content">
+                <h3 class="feature-title">SMS Marketing</h3>
+                <p class="feature-desc">Text campaigns with near-perfect open rates. Reach customers instantly on their phones.</p>
+              </div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-stat">2.3x</div>
+              <div class="feature-content">
+                <h3 class="feature-title">Loyalty & Rewards</h3>
+                <p class="feature-desc">Track visits, identify your regulars, and deliver instant rewards to keep them coming back.</p>
+              </div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-stat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 3v18h18" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7 16l4-4 4 4 5-6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h3 class="feature-title">Foot Traffic Analytics</h3>
+                <p class="feature-desc">Measure visits, return rates, and see exactly how your campaigns drive real results.</p>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="testimonials-container">
+      <span class="section-tag">Testimonials</span>
+      <h2 class="section-headline">Trusted by Businesses Like Yours</h2>
+      <div class="testimonials-row">
+        {testimonials.map((t) => (
+          <div class="testimonial-item">
+            <div class="testimonial-logo-wrap">
+              <OptimizedImage src={t.logo} alt={t.company} width={120} height={40} class="testimonial-logo" />
+            </div>
+            <blockquote class="testimonial-quote">{t.quote}</blockquote>
+            <cite class="testimonial-cite">{t.author}, {t.company}</cite>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Integrations -->
+  <section class="integrations">
+    <div class="integrations-container">
+      <span class="section-tag">Integrations</span>
+      <h2 class="section-headline">Works With Your Favorite Tools</h2>
+      <div class="integrations-grid">
+        {integrations.map((int) => (
+          <div class="integration-card">
+            <OptimizedImage src={int.logo} alt={int.name} width={80} height={40} />
+          </div>
+        ))}
+      </div>
+      <p class="integrations-note">Plus 50+ more integrations including HubSpot, Constant Contact, Toast, and Square.</p>
+    </div>
+  </section>
+
+  <!-- Feature Spotlight -->
+  <section class="spotlight">
+    <div class="spotlight-container" data-animate-feature>
+      <div class="spotlight-content">
+        <span class="section-tag">Insights & Analytics</span>
+        <h2 class="spotlight-headline">{spotlight.headline}</h2>
+        <h3 class="spotlight-subheadline">{spotlight.subheadline}</h3>
+        <p class="spotlight-description">{spotlight.description}</p>
+        <div class="spotlight-stats">
+          {spotlight.stats.map((stat) => (
+            <div class="stat-item">
+              <span class="stat-value">{stat.value}</span>
+              <span class="stat-label">{stat.label}</span>
+            </div>
+          ))}
+        </div>
+        <a href="/features#analytics" class="spotlight-link">See all analytics features →</a>
+      </div>
+      <div class="spotlight-image">
+        <OptimizedImage src={spotlight.image} alt={spotlight.imageAlt} width={600} height={400} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="blog-section">
+    <div class="blog-container">
+      <div class="blog-header">
+        <div>
+          <span class="section-tag">Insights</span>
+          <h2 class="section-headline">Latest from the Blog</h2>
+        </div>
+        <a href="/blog" class="view-all">View all posts →</a>
+      </div>
+      <div class="blog-grid">
+        {recentPosts.map((post) => (
+          <BlogCard
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            slug={post.id}
+            date={post.data.date}
+            featuredImage={post.data.featuredImage}
+            categories={post.data.categories}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="cta-container">
+      <h2 class="cta-headline">{finalCta.headline}</h2>
+      <p class="cta-description">{finalCta.subheadline}</p>
+      <div class="cta-actions">
+        <a href={finalCta.buttonLink} class="btn-cta-primary">{finalCta.buttonText}</a>
+        <a href="tel:1-855-383-4662" class="btn-cta-secondary">Call 1-855-383-4662</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ===== Design System ===== */
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&display=swap');
+
+  :root {
+    --color-cream: #FDF8F3;
+    --color-cream-dark: #F5EDE4;
+    --color-orange: #E65100;
+    --color-orange-dark: #BF360C;
+    --color-charcoal: #1a2332;
+    --color-charcoal-light: #4A5568;
+    --color-white: #FFFFFF;
+
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+  }
+
+  /* ===== Hero Section ===== */
+  .hero {
+    position: relative;
+    background: var(--color-cream);
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 75% 50%, rgba(230, 81, 0, 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 15% 70%, rgba(230, 81, 0, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-backdrop {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .hero-backdrop-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    opacity: 0.6;
+  }
+
+  .hero-backdrop-fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      var(--color-cream) 0%,
+      rgba(253, 248, 243, 0.95) 20%,
+      rgba(253, 248, 243, 0.6) 60%,
+      rgba(253, 248, 243, 0.3) 100%
+    );
+  }
+
+  .hero-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 6rem 2rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero-content {
+    max-width: 520px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--color-orange);
+    color: white;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--color-charcoal);
+    margin-bottom: 1.5rem;
+  }
+
+  .headline-accent {
+    color: var(--color-orange);
+  }
+
+  .hero-description {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--color-charcoal-light);
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .desktop-only {
+    display: flex;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+
+  .btn-primary-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 1.75rem;
+    background: var(--color-orange);
+    color: white;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(230, 81, 0, 0.3);
+  }
+
+  .btn-primary-mobile:hover {
+    background: var(--color-orange-dark);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--color-charcoal);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: 1.5px solid var(--color-charcoal-light);
+    border-radius: 50px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary-mobile:hover {
+    border-color: var(--color-charcoal);
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: var(--color-charcoal);
+    color: white;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-orange);
+    transform: translateY(-2px);
+  }
+
+  .btn-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--color-charcoal-light);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .btn-text:hover {
+    color: var(--color-orange);
+  }
+
+  .btn-text svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-text:hover svg {
+    transform: translateX(3px);
+  }
+
+  /* Hero Visual - Phone Device */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+  }
+
+  .phone-device {
+    position: relative;
+    z-index: 2;
+    transform: rotate(-2deg);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .phone-device:hover {
+    transform: rotate(0deg) scale(1.02);
+  }
+
+  .phone-frame {
+    width: 220px;
+    background: #0a0a0a;
+    border-radius: 32px;
+    padding: 8px;
+    box-shadow:
+      0 40px 80px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+      inset 0 0 2px rgba(255, 255, 255, 0.05);
+    position: relative;
+  }
+
+  .phone-frame::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    background: white;
+    border-radius: 26px;
+    z-index: 0;
+  }
+
+  .dynamic-island {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 18px;
+    background: #0a0a0a;
+    border-radius: 12px;
+    z-index: 10;
+  }
+
+  .wifi-icon-wrap {
+    width: 52px;
+    height: 52px;
+    margin: 2.5rem auto 0.5rem;
+    background: linear-gradient(145deg, var(--color-orange) 0%, #ff6d3a 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(230, 81, 0, 0.3);
+    position: relative;
+    z-index: 10;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .wifi-portal {
+    position: relative;
+    z-index: 1;
+    padding: 0 1.25rem 1rem;
+    text-align: center;
+  }
+
+  .wifi-icon {
+    width: 26px;
+    height: 26px;
+    color: white;
+  }
+
+  .portal-title {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    margin: 0 0 0.25rem 0;
+  }
+
+  .portal-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-charcoal-light);
+    margin: 0 0 1rem 0;
+  }
+
+  .portal-input {
+    width: 100%;
+    padding: 0.7rem 0.875rem;
+    background: #f5f5f5;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-charcoal);
+    margin-bottom: 0.625rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .portal-input::placeholder {
+    color: #aaa;
+  }
+
+  .portal-input:focus {
+    outline: none;
+    border-color: var(--color-orange);
+    background: white;
+  }
+
+  .portal-btn {
+    width: 100%;
+    padding: 0.7rem;
+    background: var(--color-orange);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .portal-btn:hover {
+    background: var(--color-orange-dark);
+  }
+
+  .portal-legal {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    color: #999;
+    margin: 0.625rem 0 0 0;
+    line-height: 1.4;
+  }
+
+  /* WiFi Connection Animation Styles */
+  .wifi-icon-wrap {
+    position: relative;
+  }
+
+  .wifi-check {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    color: white;
+    opacity: 0;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    transition: opacity 0.3s ease;
+  }
+
+  .wifi-bar {
+    transition: opacity 0.15s ease, stroke 0.3s ease;
+  }
+
+  /* Connecting state - pulsing bars */
+  .wifi-icon-wrap.connecting .wifi-bar {
+    animation: wifi-pulse 0.6s ease-in-out infinite alternate;
+  }
+
+  .wifi-icon-wrap.connecting .wifi-bar-1 { animation-delay: 0s; }
+  .wifi-icon-wrap.connecting .wifi-bar-2 { animation-delay: 0.15s; }
+  .wifi-icon-wrap.connecting .wifi-bar-3 { animation-delay: 0.3s; }
+
+  @keyframes wifi-pulse {
+    0% { opacity: 0.2; stroke-width: 2; }
+    100% { opacity: 1; stroke-width: 3; }
+  }
+
+  /* Connected state - green glow */
+  .wifi-icon-wrap.connected {
+    background: linear-gradient(145deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+    animation: connected-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .wifi-icon-wrap.connected .wifi-icon {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .wifi-icon-wrap.connected .wifi-check {
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.5s ease 0.1s, opacity 0.2s ease;
+  }
+
+  @keyframes connected-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+
+  /* Button states */
+  .portal-btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .portal-btn .btn-text {
+    color: white;
+    transition: opacity 0.2s ease;
+  }
+
+  .portal-btn .btn-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: none;
+  }
+
+  .wifi-portal.connecting .portal-btn .btn-text {
+    opacity: 0;
+  }
+
+  .wifi-portal.connecting .portal-btn .btn-spinner {
+    opacity: 1;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .wifi-portal.connecting .portal-btn {
+    pointer-events: none;
+    background: var(--color-charcoal-light);
+  }
+
+  @keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* Lead Captured Screen */
+  .lead-captured {
+    position: absolute;
+    top: calc(2.5rem + 52px + 0.5rem + 8px); /* margin-top + icon height + small gap + frame padding */
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 0.25rem 1.25rem 1rem;
+    text-align: center;
+    opacity: 0;
+    transform: rotateY(90deg);
+    transform-origin: center;
+    pointer-events: none;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lead-captured.visible {
+    opacity: 1;
+    transform: rotateY(0deg);
+    pointer-events: auto;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  }
+
+  .captured-title {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #16a34a;
+    margin: 0 0 0.25rem 0;
+    animation: fade-up 0.4s ease 0.15s both;
+  }
+
+  .captured-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--color-charcoal-light);
+    margin: 0 0 1rem 0;
+    animation: fade-up 0.4s ease 0.25s both;
+  }
+
+  .captured-email {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    margin: 0 0 0.875rem 0;
+    padding: 0.625rem 1rem;
+    background: #f8f8f8;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    width: 100%;
+    box-sizing: border-box;
+    animation: fade-up 0.4s ease 0.35s both;
+  }
+
+  .captured-btn {
+    background: var(--color-orange);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    animation: fade-up 0.4s ease 0.45s both;
+    width: 100%;
+  }
+
+  .captured-footer {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: #999;
+    margin: 0.75rem 0 0 0;
+    animation: fade-up 0.4s ease 0.55s both;
+  }
+
+  .captured-btn:hover {
+    background: var(--color-orange-dark);
+    transform: translateY(-1px);
+  }
+
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Stat increment animation */
+  .floating-stat.incrementing .stat-num {
+    animation: stat-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes stat-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); color: #22c55e; }
+    100% { transform: scale(1); }
+  }
+
+  /* Hide form elements when transitioning */
+  .wifi-portal.hiding {
+    opacity: 0;
+    transform: rotateY(-90deg);
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+
+  .home-indicator {
+    width: 80px;
+    height: 4px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    margin: 0.5rem auto 0.375rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Floating Stats */
+  .floating-stat {
+    position: absolute;
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    z-index: 3;
+  }
+
+  .stat-emails {
+    top: 8%;
+    right: 0%;
+    animation: floatA 4s ease-in-out infinite;
+  }
+
+  .stat-rate {
+    bottom: 15%;
+    left: 0%;
+    animation: floatB 4s ease-in-out infinite;
+  }
+
+  @keyframes floatA {
+    0%, 100% { transform: translateY(0) rotate(2deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+
+  @keyframes floatB {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-10px) rotate(-2deg); }
+  }
+
+  .stat-num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-orange);
+    line-height: 1;
+  }
+
+  .stat-text {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--color-charcoal-light);
+  }
+
+  /* Hero Stats Bar */
+  .hero-stats {
+    background: var(--color-charcoal);
+    margin-top: 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stats-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .stat-block {
+    text-align: center;
+  }
+
+  .stat-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    line-height: 1.2;
+  }
+
+  .hero-stats .stat-label {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Trust Bar */
+  .trust-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    margin-left: 0.5rem;
+  }
+
+  .trust-text {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-charcoal-light);
+  }
+
+  .trust-logos {
+    display: flex;
+    align-items: center;
+  }
+
+  .trust-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    margin-left: -6px;
+    position: relative;
+  }
+
+  .trust-logo:first-child {
+    margin-left: 0;
+  }
+
+  .trust-logo:nth-child(1) { z-index: 3; }
+  .trust-logo:nth-child(2) { z-index: 2; }
+  .trust-logo:nth-child(3) { z-index: 1; }
+
+  .trust-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* ===== How It Works Section ===== */
+  .how-it-works {
+    background: var(--color-white);
+    padding: 5rem 2rem;
+  }
+
+  .how-it-works-container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .how-it-works-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 4rem;
+  }
+
+  .section-tag {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-orange);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 600;
+    color: var(--color-charcoal);
+    margin-bottom: 1rem;
+  }
+
+  .steps-flow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    position: relative;
+  }
+
+  .step-card {
+    position: relative;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: var(--color-cream);
+    border-radius: var(--radius-lg);
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .step-card.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition-delay: var(--delay, 0s);
+  }
+
+  .step-number {
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--color-orange);
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(230, 81, 0, 0.3);
+  }
+
+  .step-image {
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .step-image img {
+    max-height: 180px;
+    width: auto;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+  }
+
+  .step-content {
+    padding-top: 0.5rem;
+  }
+
+  .step-title {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-orange);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-headline {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    margin-bottom: 0.75rem;
+  }
+
+  .step-description {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-charcoal-light);
+  }
+
+  .step-connector {
+    position: absolute;
+    right: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3rem;
+    height: 3rem;
+    color: var(--color-orange);
+    z-index: 1;
+  }
+
+  .step-connector svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ===== Feature Highlights ===== */
+  .features {
+    background: var(--color-charcoal);
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(230, 81, 0, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(230, 81, 0, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .features-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .features-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .features-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-orange);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .features-link:hover {
+    color: var(--color-orange-dark);
+    transform: translateX(4px);
+  }
+
+  .features .section-tag {
+    color: var(--color-orange);
+    opacity: 0.9;
+  }
+
+  .features .section-headline {
+    color: var(--color-white);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(230, 81, 0, 0.3);
+    transform: translateY(-4px);
+  }
+
+  .feature-stat {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-orange);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .feature-stat svg {
+    width: 48px;
+    height: 48px;
+    color: var(--color-orange);
+  }
+
+  .feature-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .feature-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-white);
+    margin: 0;
+  }
+
+  .feature-desc {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .feature-card {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .feature-stat {
+      font-size: 2.5rem;
+      min-width: 70px;
+    }
+
+    .feature-stat svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  /* ===== Testimonials ===== */
+  .testimonials {
+    background: var(--color-cream);
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--color-cream-dark);
+    border-bottom: 1px solid var(--color-cream-dark);
+  }
+
+  .testimonials-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .testimonials .section-headline {
+    margin-bottom: 2.5rem;
+  }
+
+  .testimonials-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .testimonial-item {
+    text-align: center;
+  }
+
+  .testimonial-logo-wrap {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 1.25rem;
+    background: var(--color-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+
+  .testimonial-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .testimonial-quote {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--color-charcoal);
+    margin: 0 0 1rem 0;
+  }
+
+  .testimonial-cite {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--color-charcoal-light);
+  }
+
+  @media (max-width: 768px) {
+    .testimonials-row {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+
+  /* ===== Integrations ===== */
+  .integrations {
+    background: var(--color-white);
+    padding: 5rem 2rem;
+  }
+
+  .integrations-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .integrations-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .integration-card {
+    background: var(--color-cream);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .integration-card img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .integrations-note {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--color-charcoal-light);
+    margin-top: 1.5rem;
+  }
+
+  /* ===== Feature Spotlight ===== */
+  .spotlight {
+    background: var(--color-cream);
+    padding: 5rem 2rem;
+  }
+
+  .spotlight-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .spotlight-container.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .spotlight-content {
+    max-width: 520px;
+  }
+
+  .spotlight-headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 600;
+    color: var(--color-charcoal);
+    margin-bottom: 0.5rem;
+  }
+
+  .spotlight-subheadline {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-charcoal);
+    margin-bottom: 1.25rem;
+    text-decoration: underline;
+    text-decoration-color: var(--color-orange);
+    text-underline-offset: 4px;
+  }
+
+  .spotlight-description {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-charcoal-light);
+    margin-bottom: 2rem;
+  }
+
+  .spotlight-stats {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .spotlight-link {
+    display: inline-block;
+    margin-top: 2rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-orange);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .spotlight-link:hover {
+    color: var(--color-orange-dark);
+    transform: translateX(4px);
+  }
+
+  .stat-item {
+    text-align: left;
+  }
+
+  .stat-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-orange);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-charcoal-light);
+  }
+
+  .spotlight-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .spotlight-image img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* ===== Blog Section ===== */
+  .blog-section {
+    background: var(--color-white);
+    padding: 5rem 2rem;
+  }
+
+  .blog-container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .blog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+  }
+
+  .view-all {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--color-orange);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .view-all:hover {
+    color: var(--color-orange-dark);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  /* ===== CTA Section ===== */
+  .cta {
+    background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-orange-dark) 100%);
+    padding: 5rem 2rem;
+  }
+
+  .cta-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .cta-headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: 1rem;
+  }
+
+  .cta-description {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-cta-primary {
+    display: inline-flex;
+    padding: 1rem 2rem;
+    background: var(--color-white);
+    color: var(--color-orange);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn-cta-secondary {
+    display: inline-flex;
+    padding: 1rem 2rem;
+    background: transparent;
+    color: var(--color-white);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-cta-secondary:hover {
+    border-color: var(--color-white);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 1024px) {
+    .hero-backdrop {
+      display: none;
+    }
+
+    .hero-container {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+      padding: 4rem 1.5rem 0;
+    }
+
+    .hero-content {
+      max-width: 100%;
+      order: 1;
+    }
+
+    .hero-visual {
+      display: none;
+    }
+
+    .phone-frame {
+      width: 180px;
+      border-radius: 28px;
+      padding: 6px;
+    }
+
+    .phone-frame::before {
+      top: 6px;
+      bottom: 6px;
+      left: 6px;
+      right: 6px;
+      border-radius: 24px;
+    }
+
+    .dynamic-island {
+      top: 12px;
+      width: 64px;
+      height: 18px;
+    }
+
+    .wifi-portal {
+      padding: 2.5rem 1rem 0.75rem;
+    }
+
+    .wifi-icon-wrap {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 0.75rem;
+    }
+
+    .wifi-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .portal-title {
+      font-size: 1rem;
+    }
+
+    .portal-subtitle {
+      font-size: 0.7rem;
+    }
+
+    .portal-input {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .portal-btn {
+      padding: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .home-indicator {
+      width: 70px;
+      height: 3px;
+    }
+
+    .floating-stat {
+      display: none;
+    }
+
+    .desktop-only {
+      display: none;
+    }
+
+    .mobile-only {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      order: 2;
+      width: 100%;
+      padding: 0.5rem 0 1rem;
+    }
+
+    .hero-stats {
+      margin-top: 2rem;
+    }
+
+    .stats-inner {
+      gap: 1.5rem;
+    }
+
+    .stat-divider {
+      display: none;
+    }
+
+    .steps-flow {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .step-connector {
+      display: none;
+    }
+
+    .spotlight-container {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .spotlight-content {
+      max-width: 100%;
+    }
+
+    .spotlight-stats {
+      justify-content: center;
+    }
+
+    .spotlight-image {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-container {
+      padding: 2rem 1rem 0;
+      gap: 1rem;
+    }
+
+    .hero-headline {
+      font-size: 1.75rem;
+    }
+
+    .hero-description {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .phone-frame {
+      width: 160px;
+      border-radius: 24px;
+      padding: 5px;
+    }
+
+    .phone-frame::before {
+      top: 5px;
+      bottom: 5px;
+      left: 5px;
+      right: 5px;
+      border-radius: 22px;
+    }
+
+    .dynamic-island {
+      top: 10px;
+      width: 56px;
+      height: 16px;
+    }
+
+    .wifi-portal {
+      padding: 2.25rem 0.875rem 0.625rem;
+    }
+
+    .wifi-icon-wrap {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0.625rem;
+    }
+
+    .wifi-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .portal-title {
+      font-size: 0.9rem;
+    }
+
+    .portal-subtitle {
+      font-size: 0.65rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .portal-input {
+      padding: 0.5rem 0.625rem;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .portal-btn {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .portal-legal {
+      font-size: 0.55rem;
+      margin-top: 0.5rem;
+    }
+
+    .home-indicator {
+      width: 60px;
+      height: 3px;
+      margin: 0.375rem auto 0.25rem;
+    }
+
+    .stats-inner {
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1.25rem 1rem;
+    }
+
+    .stat-block {
+      min-width: 70px;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+    }
+
+    .spotlight-stats {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .blog-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Scroll-triggered animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    // Observe step cards (How It Works)
+    document.querySelectorAll('.step-card').forEach(card => {
+      observer.observe(card);
+    });
+
+    // Observe spotlight section
+    document.querySelectorAll('.spotlight-container').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ============================================
+    // WiFi Connection Animation
+    // ============================================
+    const wifiForm = document.getElementById('wifi-form');
+    const wifiPortal = document.getElementById('wifi-portal');
+    const leadCaptured = document.getElementById('lead-captured');
+    const emailInput = document.getElementById('wifi-email');
+    const capturedEmail = document.getElementById('captured-email');
+    const capturedBtn = document.getElementById('captured-btn');
+    const portalTitle = document.getElementById('portal-title');
+    const portalSubtitle = document.getElementById('portal-subtitle');
+    const statNum = document.getElementById('stat-num');
+    const statEmails = document.getElementById('stat-emails');
+
+    const wifiIconWrap = document.getElementById('wifi-icon-wrap');
+
+    if (wifiForm && wifiPortal && leadCaptured && wifiIconWrap) {
+      wifiForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = emailInput.value;
+        if (!email) return;
+
+        // Store email for contact page
+        localStorage.setItem('vivaspot_demo_email', email);
+
+        // Phase 1: Connecting animation (3s for 4+ pulses)
+        wifiPortal.classList.add('connecting');
+        wifiIconWrap.classList.add('connecting');
+
+        await sleep(3000);
+
+        // Phase 2: Connected state (1.8s - let them see the success)
+        wifiPortal.classList.remove('connecting');
+        wifiIconWrap.classList.remove('connecting');
+        wifiIconWrap.classList.add('connected');
+        portalTitle.textContent = 'Connected!';
+        portalSubtitle.textContent = 'You\'re online';
+
+        // Increment the stat counter
+        if (statNum && statEmails) {
+          const currentNum = parseInt(statNum.textContent.replace(/,/g, ''));
+          statNum.textContent = (currentNum + 1).toLocaleString();
+          statEmails.classList.add('incrementing');
+        }
+
+        await sleep(1800);
+
+        // Phase 3: Morph to Lead Captured screen
+        wifiPortal.classList.add('hiding');
+
+        await sleep(300);
+
+        // Show captured email
+        capturedEmail.textContent = email;
+        leadCaptured.classList.add('visible');
+
+        // Remove incrementing class after animation
+        setTimeout(() => {
+          statEmails?.classList.remove('incrementing');
+        }, 500);
+      });
+
+      // Handle "Set this up for YOUR business" button
+      capturedBtn?.addEventListener('click', () => {
+        window.location.href = '/contact?demo=true';
+      });
+    }
+
+    // Helper function for delays
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  });
+</script>

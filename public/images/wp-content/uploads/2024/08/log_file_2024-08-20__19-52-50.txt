@@ -1,0 +1,43 @@
+
+---Downloaded files---
+The import files for: SaaS were successfully downloaded!
+Initial max execution time = 30
+Files info:
+Site URL = http://3.93.147.195
+Data file = /opt/bitnami/wordpress/wp-content/themes/sierra/inc/demo-import/demos/saas/saas.xml
+Widget file = /opt/bitnami/wordpress/wp-content/themes/sierra/inc/demo-import/demos/general/website-content.xml
+Customizer file = /opt/bitnami/wordpress/wp-content/themes/sierra/inc/demo-import/demos/general/widgets.wie
+Redux files:
+not defined!
+
+---pt-ocdi/before_widgets_import---
+
+
+---Importing widgets---
+Main Sidebar : 
+
+Search - Search - Imported
+Categories - Categories - Imported
+Recent Posts with Thumbnails - Recent posts - Imported
+Tag Cloud - Tags - Imported
+
+Shop Sidebar : 
+
+Product Search - No Title - Imported
+Filter Products by Price - Filter by price - Imported
+Filter Products by Attribute - Filter by - Imported
+Product Categories - Product categories - Imported
+Products by Rating list - Top rated products - Imported
+Product Tag Cloud - Product tags - Imported
+
+Product Sidebar : 
+
+Product Search - No Title - Imported
+Product Categories - Product categories - Imported
+Products by Rating list - Top rated products - Imported
+Product Tag Cloud - Product tags - Imported
+
+
+
+---pt-ocdi/after_import---
+

@@ -1,0 +1,131 @@
+hero:
+  headline: "Your WiFi is Already Generating Leads."
+  headlineAccent: "You're Just Not Capturing Them."
+  subheadline: "The average business sees 500+ WiFi connections monthly. Most capture zero. VivaSpot businesses capture 35%."
+
+sections:
+  - id: capture
+    number: "01"
+    navLabel: Capture
+    title: "Capture 35% of WiFi Users—Automatically"
+    tagline: Build your marketing list while you sleep
+    description: "Every WiFi login is an opportunity. VivaSpot transforms your guest WiFi into a lead generation machine—capturing emails, phone numbers, and birthdays without any extra effort from your staff."
+    image: /images/wp-content/uploads/2024/09/email-collection-for-website.png
+    imageAlt: WiFi splash page capturing customer contact information
+    highlights:
+      - Unlimited Email Collection
+      - Phone Number Capture
+      - Birthday Collection
+      - Branded Splash Pages
+    statValue: "35%"
+    statLabel: Average Capture Rate
+
+  - id: marketing
+    number: "02"
+    navLabel: Marketing
+    title: "98% Open Rates. Zero Manual Work."
+    tagline: "The right message at the right time—automatically"
+    description: "Set it and forget it. VivaSpot sends win-back campaigns to lapsed customers, birthday rewards that drive visits, and presence-triggered offers—all on autopilot."
+    image: /images/wp-content/uploads/2024/09/digital-marketing-for-website.png
+    imageAlt: Automated marketing campaign dashboard
+    highlights:
+      - Win-Back Campaigns
+      - Presence Marketing
+      - Birthday & Event Campaigns
+      - SMS & Email Automation
+    statValue: "98%"
+    statLabel: SMS Open Rate
+
+  - id: analytics
+    number: "03"
+    navLabel: Analytics
+    title: Know Exactly Which Campaign Made the Sale
+    tagline: From intuitive dashboards to AI-powered insights
+    description: "See which campaigns drive revenue, track customer visit patterns, and get AI recommendations for optimizing your marketing. Every dollar is tracked, every result is measurable."
+    image: /images/wp-content/uploads/2022/01/BirthdayEmailsGraphs-1024x311.png
+    imageAlt: Analytics dashboard showing campaign performance and ROI
+    highlights:
+      - Real-Time Analytics
+      - Customer Behavior Insights
+      - Campaign Performance Tracking
+      - AI-Powered Recommendations
+    statValue: "12x"
+    statLabel: Average Campaign ROI
+
+  - id: integrations
+    number: "04"
+    navLabel: Integrations
+    title: Works With What You Already Have
+    tagline: "Live in 5 minutes, no IT required"
+    description: "VivaSpot connects seamlessly with your WiFi, POS, CRM, and email marketing tools. No hardware changes, no complex setup—just turn it on and start capturing."
+    image: /images/wp-content/uploads/2024/09/gears-icon-page-for-website1.png
+    imageAlt: Integration ecosystem connecting various business tools
+    highlights:
+      - Mailchimp & HubSpot
+      - Clover & Toast POS
+      - Cisco Meraki & Ubiquiti
+      - 50+ Total Integrations
+    statValue: 5 min
+    statLabel: Setup Time
+
+integrationLogos:
+  - src: /images/wp-content/uploads/2024/08/mailchimp-logo-for-website.png
+    name: Mailchimp
+  - src: /images/wp-content/uploads/2024/08/clover-logo.png
+    name: Clover
+  - src: /images/wp-content/uploads/2024/08/cisco-meraki-logo.png
+    name: Cisco Meraki
+  - src: /images/wp-content/uploads/2024/08/Ubiquiti_Logo.png
+    name: Ubiquiti
+
+socialProof:
+  headline: Real Businesses. Real Results.
+  results:
+    - businessName: Greenleaf Café
+      businessType: Restaurant
+      logo: /images/logo-greenleaf.png
+      quote: "VivaSpot transformed our guest WiFi into our best marketing channel. We've captured over 2,400 contacts and our win-back campaigns bring customers back every week."
+      author: Sarah Johnson
+      role: Marketing Director
+      metrics:
+        - label: Contacts captured
+          before: "0"
+          after: "2,400+"
+        - label: Automated campaigns
+          before: None
+          after: 12 active
+        - label: Win-back rate
+          before: N/A
+          after: "23%"
+        - label: Return visits
+          before: Baseline
+          after: "+2.3x"
+
+    - businessName: Fitness Fusion Gym
+      businessType: Fitness Center
+      logo: /images/logo-fitness-fusion.png
+      quote: "The birthday campaigns alone have paid for VivaSpot many times over. Members love getting personalized offers, and we love the automatic engagement."
+      author: Lisa Martinez
+      role: Operations Manager
+      metrics:
+        - label: Contacts captured
+          before: "0"
+          after: "1,800+"
+        - label: Automated campaigns
+          before: None
+          after: 8 active
+        - label: Win-back rate
+          before: N/A
+          after: "19%"
+        - label: Return visits
+          before: Baseline
+          after: "+1.8x"
+
+cta:
+  headline: Turn Your WiFi Into a Marketing Machine
+  subheadline: "Start capturing leads today. Free to try, live in 5 minutes."
+  primaryButtonText: Start Free Trial
+  primaryButtonLink: /contact
+  secondaryButtonText: View Pricing
+  secondaryButtonLink: /pricing
+  trustSignals: "Free tier available • No credit card required • 5-minute setup"

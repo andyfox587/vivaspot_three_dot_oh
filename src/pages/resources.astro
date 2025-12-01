@@ -1,0 +1,553 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const resources = [
+  {
+    title: 'Getting Started Guide',
+    description: 'Learn how to set up VivaSpot and start capturing guest data in minutes.',
+    type: 'Guide',
+    icon: 'book',
+    link: '#',
+  },
+  {
+    title: 'WiFi Marketing Best Practices',
+    description: 'Proven strategies to maximize ROI from your guest WiFi marketing campaigns.',
+    type: 'eBook',
+    icon: 'download',
+    link: '#',
+  },
+  {
+    title: 'CRM Integration Tutorial',
+    description: 'Step-by-step video instructions for connecting VivaSpot to your CRM.',
+    type: 'Video',
+    icon: 'video',
+    link: '#',
+  },
+  {
+    title: 'Email Campaign Templates',
+    description: 'Ready-to-use email templates designed for restaurant marketing.',
+    type: 'Templates',
+    icon: 'template',
+    link: '#',
+  },
+  {
+    title: 'SMS Marketing Playbook',
+    description: 'Build opt-in text message lists and send promotions that convert.',
+    type: 'Guide',
+    icon: 'book',
+    link: '#',
+  },
+  {
+    title: 'Analytics Dashboard Tour',
+    description: 'A deep dive into VivaSpot analytics and how to use data to grow.',
+    type: 'Video',
+    icon: 'video',
+    link: '#',
+  },
+];
+
+const icons = {
+  book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  download: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+  video: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+  template: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>`,
+};
+---
+
+<BaseLayout title="Resources - Guides, Videos & Templates">
+  <!-- Hero Section -->
+  <section class="resources-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <span class="hero-tag">Resources</span>
+      <h1 class="hero-title">Everything you need to succeed</h1>
+      <p class="hero-subtitle">
+        Guides, tutorials, and templates to help you get the most out of VivaSpot.
+      </p>
+    </div>
+  </section>
+
+  <!-- Resources Grid -->
+  <section class="resources-section">
+    <div class="resources-container">
+      <div class="resources-grid">
+        {resources.map((resource, i) => (
+          <a
+            href={resource.link}
+            class="resource-card"
+            style={`--delay: ${i * 0.1}s`}
+          >
+            <div class="card-icon" set:html={icons[resource.icon as keyof typeof icons]} />
+            <span class="resource-type">{resource.type}</span>
+            <h2 class="resource-title">{resource.title}</h2>
+            <p class="resource-description">{resource.description}</p>
+            <span class="resource-link">
+              {resource.type === 'Video' ? 'Watch now' : resource.type === 'eBook' ? 'Download' : 'Learn more'}
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Section -->
+  <section class="video-section">
+    <div class="video-container">
+      <div class="video-content">
+        <span class="video-tag">See It In Action</span>
+        <h2 class="video-title">Watch VivaSpot transform guest WiFi</h2>
+        <p class="video-description">
+          Learn how VivaSpot helps businesses capture leads, build customer loyalty, and drive revenue through guest WiFi marketing.
+        </p>
+        <a href="/contact" class="video-cta">
+          Request a Demo
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+      <div class="video-player">
+        <div class="video-placeholder">
+          <div class="play-button">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+          <p class="placeholder-text">Demo Video Coming Soon</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Help Section -->
+  <section class="help-section">
+    <div class="help-container">
+      <div class="help-card">
+        <div class="help-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <h3 class="help-title">Need help?</h3>
+        <p class="help-text">Our support team is here to answer your questions.</p>
+        <a href="/contact" class="help-link">Contact Support</a>
+      </div>
+
+      <div class="help-card">
+        <div class="help-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </div>
+        <h3 class="help-title">Talk to Sales</h3>
+        <p class="help-text">Ready to get started? Let's discuss your needs.</p>
+        <a href="tel:1-855-383-4662" class="help-link">1-855-383-4662</a>
+      </div>
+
+      <div class="help-card">
+        <div class="help-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <h3 class="help-title">Book a Demo</h3>
+        <p class="help-text">See VivaSpot in action with a personalized demo.</p>
+        <a href="https://calendly.com/vivaspot" target="_blank" rel="noopener" class="help-link">Schedule Now</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero Section */
+  .resources-hero {
+    position: relative;
+    background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
+    padding: 6rem 0 4rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 25%, rgba(230, 74, 25, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 85% 75%, rgba(230, 74, 25, 0.04) 0%, transparent 40%);
+  }
+
+  .hero-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange-500);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease 0.1s forwards;
+    opacity: 0;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    color: var(--charcoal-light);
+    max-width: 500px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  /* Resources Section */
+  .resources-section {
+    background: var(--cream);
+    padding: 4rem 0 5rem;
+  }
+
+  .resources-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .resources-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .resources-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .resource-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.5s ease var(--delay) forwards;
+    opacity: 0;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .resource-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(230, 74, 25, 0.1);
+    border-radius: 12px;
+    color: var(--orange-500);
+    margin-bottom: 1.25rem;
+  }
+
+  .card-icon :global(svg) {
+    width: 24px;
+    height: 24px;
+  }
+
+  .resource-type {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--orange-500);
+    margin-bottom: 0.5rem;
+  }
+
+  .resource-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.75rem;
+    transition: color 0.2s ease;
+  }
+
+  .resource-card:hover .resource-title {
+    color: var(--orange-500);
+  }
+
+  .resource-description {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--charcoal-light);
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .resource-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--orange-500);
+    transition: gap 0.3s ease;
+  }
+
+  .resource-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .resource-card:hover .resource-link {
+    gap: 0.5rem;
+  }
+
+  /* Video Section */
+  .video-section {
+    background: white;
+    padding: 5rem 0;
+  }
+
+  .video-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .video-container {
+      grid-template-columns: 1fr 1.2fr;
+    }
+  }
+
+  .video-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange-500);
+    margin-bottom: 1rem;
+  }
+
+  .video-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+  }
+
+  .video-description {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--charcoal-light);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .video-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--orange-500);
+    text-decoration: none;
+    transition: gap 0.3s ease;
+  }
+
+  .video-cta:hover {
+    gap: 0.75rem;
+  }
+
+  .video-cta svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .video-player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--charcoal);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .play-button {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--orange-500);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .play-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 30px rgba(230, 74, 25, 0.4);
+  }
+
+  .play-button svg {
+    width: 32px;
+    height: 32px;
+    margin-left: 4px;
+  }
+
+  .placeholder-text {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Help Section */
+  .help-section {
+    background: var(--cream);
+    padding: 5rem 0;
+  }
+
+  .help-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .help-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .help-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .help-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+  }
+
+  .help-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    border-radius: 14px;
+    color: var(--orange-500);
+    margin: 0 auto 1.25rem;
+  }
+
+  .help-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .help-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+  }
+
+  .help-text {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--charcoal-light);
+    margin-bottom: 1rem;
+  }
+
+  .help-link {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--orange-500);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .help-link:hover {
+    color: var(--orange-700);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

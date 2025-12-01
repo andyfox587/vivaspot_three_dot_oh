@@ -1,0 +1,330 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import OptimizedImage from '../../../components/OptimizedImage.astro';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../../keystatic.config';
+import Markdoc from '@markdoc/markdoc';
+
+// This page is server-rendered for preview functionality
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/blog');
+}
+
+// Use Keystatic reader to get content directly from filesystem
+const reader = createReader(process.cwd(), keystaticConfig);
+const post = await reader.collections.blog.read(slug);
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+// Published posts don't need preview - redirect to live page
+if (post.published) {
+  return Astro.redirect(`/blog/${slug}`);
+}
+
+const formattedDate = post.date
+  ? new Date(post.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : 'Draft';
+
+// Render the markdoc content to HTML
+const contentData = await post.content();
+// Keystatic wraps the markdoc AST in { node: ... }, need to transform it
+const transformed = Markdoc.transform(contentData.node);
+const content = Markdoc.renderers.html(transformed);
+---
+
+<BaseLayout
+  title={post.title + ' (Preview)'}
+  description={post.excerpt}
+  image={post.featuredImage}
+  type="article"
+>
+  <!-- Preview Banner -->
+  <div class="preview-banner">
+    <span class="preview-badge">Preview Mode</span>
+    <span class="preview-text">This is a preview of saved content. Changes must be saved in Keystatic to appear here.</span>
+    <a href={`/keystatic/collection/blog/item/${slug}`} class="preview-edit-link">Back to Editor</a>
+  </div>
+
+  <article class="article">
+    <!-- Article Header -->
+    <header class="article-header">
+      <div class="header-bg"></div>
+      <div class="header-container">
+        <a href="/blog" class="back-link">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+          </svg>
+          Back to Blog
+        </a>
+
+        <div class="article-meta">
+          {post.categories && post.categories.length > 0 && (
+            <div class="categories">
+              {post.categories.map((cat: string) => (
+                <span class="category">{cat}</span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <h1 class="article-title">{post.title}</h1>
+
+        <div class="article-info">
+          <time class="date">
+            {formattedDate}
+          </time>
+          <span class="reading-time">5 min read</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Featured Image -->
+    {post.featuredImage && (
+      <div class="featured-image-wrapper">
+        <div class="featured-image-container">
+          <OptimizedImage
+            src={post.featuredImage}
+            alt={post.title}
+            width={896}
+            height={560}
+            class="featured-image"
+            priority={true}
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Article Content -->
+    <div class="article-content">
+      <div class="content-container">
+        <div class="prose" set:html={content} />
+
+        <!-- Tags -->
+        {post.tags && post.tags.length > 0 && (
+          <div class="tags-section">
+            <span class="tags-label">Tags:</span>
+            <div class="tags">
+              {post.tags.map((tag: string) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* Preview Banner */
+  .preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+  }
+
+  .preview-badge {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+  }
+
+  .preview-text {
+    opacity: 0.9;
+  }
+
+  .preview-edit-link {
+    color: white;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .preview-edit-link:hover {
+    opacity: 0.8;
+  }
+
+  /* Article Header */
+  .article-header {
+    position: relative;
+    background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
+    padding: 4rem 0 3rem;
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(230, 74, 25, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba(230, 74, 25, 0.03) 0%, transparent 40%);
+  }
+
+  .header-container {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--charcoal-light);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--orange-500);
+  }
+
+  .back-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .article-meta {
+    margin-bottom: 1rem;
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .category {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--orange-500);
+    background: rgba(230, 74, 25, 0.1);
+    padding: 0.4rem 0.875rem;
+    border-radius: 50px;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.25rem;
+  }
+
+  .article-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--charcoal-light);
+  }
+
+  .date, .reading-time {
+    display: flex;
+    align-items: center;
+  }
+
+  .reading-time::before {
+    content: '•';
+    margin-right: 1.5rem;
+    color: var(--charcoal-light);
+    opacity: 0.5;
+  }
+
+  /* Featured Image */
+  .featured-image-wrapper {
+    background: var(--cream);
+    padding: 0 1.5rem;
+  }
+
+  .featured-image-container {
+    max-width: 56rem;
+    margin: 0 auto;
+    margin-top: -2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .featured-image {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Article Content */
+  .article-content {
+    background: var(--cream);
+    padding: 3rem 0 4rem;
+  }
+
+  .content-container {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Tags */
+  .tags-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .tags-label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--charcoal-light);
+    background: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+</style>

@@ -1,0 +1,335 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Book a Meeting - Schedule a Demo">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <span class="hero-tag">Book a Meeting</span>
+      <h1 class="hero-title">Let's talk WiFi marketing</h1>
+      <p class="hero-subtitle">
+        Schedule a free consultation with our team. We'll show you how VivaSpot can help your business capture leads and drive repeat visits.
+      </p>
+    </div>
+  </section>
+
+  <!-- Calendly Section -->
+  <section class="calendly-section">
+    <div class="calendly-container">
+      <div class="calendly-info">
+        <h2 class="info-title">What to expect</h2>
+        <ul class="info-list">
+          <li class="info-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <strong>30-minute call</strong>
+              <span>Quick and focused on your needs</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <strong>Live demo</strong>
+              <span>See the platform in action</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <strong>Q&A session</strong>
+              <span>Get all your questions answered</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+              </svg>
+            </div>
+            <div class="info-text">
+              <strong>No pressure</strong>
+              <span>Just an honest conversation</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="contact-alt">
+          <p class="contact-text">Prefer to reach out directly?</p>
+          <div class="contact-links">
+            <a href="mailto:sales@vivaspot.com" class="contact-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              sales@vivaspot.com
+            </a>
+            <a href="tel:1-855-383-4662" class="contact-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              1-855-383-4662
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendly-embed-wrapper">
+        <div class="calendly-inline-widget" data-url="https://calendly.com/vivaspot"></div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    padding: 6rem 2rem 4rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--cream) 0%, #fff 50%, var(--cream-dark) 100%);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(230, 74, 25, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(230, 74, 25, 0.04) 0%, transparent 40%);
+  }
+
+  .hero-container {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--orange-500);
+    margin-bottom: 1rem;
+    animation: fadeIn 0.6s ease forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+    line-height: 1.15;
+    animation: fadeInUp 0.6s ease 0.1s forwards;
+    opacity: 0;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--charcoal-light);
+    line-height: 1.7;
+    max-width: 550px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  /* Calendly Section */
+  .calendly-section {
+    padding: 3rem 2rem 5rem;
+    background: white;
+  }
+
+  .calendly-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .calendly-container {
+      grid-template-columns: 380px 1fr;
+    }
+  }
+
+  /* Info Column */
+  .calendly-info {
+    padding: 2rem;
+    background: var(--cream);
+    border-radius: 20px;
+    animation: fadeInUp 0.6s ease 0.3s forwards;
+    opacity: 0;
+  }
+
+  .info-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+  }
+
+  .info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .info-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .info-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 12px;
+    color: var(--orange-500);
+    flex-shrink: 0;
+  }
+
+  .info-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .info-text strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .info-text span {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--charcoal-light);
+  }
+
+  /* Contact Alternative */
+  .contact-alt {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .contact-text {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--charcoal-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .contact-link:hover {
+    color: var(--orange-500);
+  }
+
+  .contact-link svg {
+    width: 18px;
+    height: 18px;
+    color: var(--orange-500);
+  }
+
+  /* Calendly Embed */
+  .calendly-embed-wrapper {
+    animation: fadeInUp 0.6s ease 0.4s forwards;
+    opacity: 0;
+  }
+
+  .calendly-inline-widget {
+    min-width: 320px;
+    height: 700px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 1023px) {
+    .calendly-info {
+      order: 2;
+    }
+
+    .calendly-embed-wrapper {
+      order: 1;
+    }
+  }
+</style>

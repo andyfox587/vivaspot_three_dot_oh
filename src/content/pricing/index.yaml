@@ -1,0 +1,105 @@
+headline: Simple pricing that grows with you
+subheadline: Start free and upgrade as your business grows. No contracts, no surprises.
+tiers:
+  - name: Free
+    price: $0
+    period: /month
+    description: Get started with no-hassle guest WiFi.
+    highlighted: false
+    ctaText: Start Free
+    features:
+      - text: No-hassle guest WiFi
+        included: true
+      - text: Branded splash page
+        included: true
+      - text: Basic email collection
+        included: true
+      - text: Weekly reports
+        included: true
+      - text: Coupon/Foodie Club
+        included: true
+  - name: Basic
+    price: $19
+    period: /month
+    description: Essential tools for small businesses.
+    highlighted: false
+    ctaText: Start Free Trial
+    features:
+      - text: Everything in Free
+        included: true
+      - text: Mailchimp integration
+        included: true
+      - text: Thank you emails
+        included: true
+      - text: Clover POS support
+        included: true
+  - name: Marketer
+    price: $55
+    period: /month
+    description: Advanced marketing automation.
+    highlighted: false
+    ctaText: Start Free Trial
+    features:
+      - text: Everything in Basic
+        included: true
+      - text: Web dashboard
+        included: true
+      - text: Mobile/Birthday campaigns
+        included: true
+      - text: Action landing pages
+        included: true
+      - text: Follow-up campaigns
+        included: true
+  - name: Plus
+    price: $99
+    period: /month
+    description: Full-featured marketing suite.
+    highlighted: true
+    ctaText: Start Free
+    features:
+      - text: Everything in Marketer
+        included: true
+      - text: Foot traffic analytics
+        included: true
+      - text: Texting campaigns (SMS)
+        included: true
+      - text: Presence campaigns
+        included: true
+      - text: Priority support
+        included: true
+  - name: Pro
+    price: $249
+    period: /month
+    description: Enterprise-grade for multi-location businesses.
+    highlighted: false
+    ctaText: Contact Sales
+    features:
+      - text: Everything in Plus
+        included: true
+      - text: Multiple store support
+        included: true
+      - text: Campaign editor
+        included: true
+      - text: AI email analysis
+        included: true
+      - text: Additional CRM integrations
+        included: true
+      - text: Dedicated support
+        included: true
+faq:
+  - question: What counts as a guest login?
+    answer: >-
+      A guest login is counted each time a unique user connects to your WiFi
+      through the VivaSpot splash page within a calendar month.
+  - question: Can I upgrade or downgrade my plan?
+    answer: >-
+      Yes! You can upgrade or downgrade your plan at any time. Changes take
+      effect at the start of your next billing cycle.
+  - question: Is there a contract or commitment?
+    answer: >-
+      No contracts. All plans are month-to-month and you can cancel anytime. We
+      believe in earning your business every month.
+  - question: What CRM integrations do you support?
+    answer: >-
+      We integrate with Mailchimp, Constant Contact, HubSpot, Salesforce, and
+      many more. Plus and Pro plans include all integrations.

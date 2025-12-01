@@ -1,0 +1,590 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OptimizedImage from '../components/OptimizedImage.astro';
+import { getCollection } from 'astro:content';
+
+// Get pricing content from CMS
+const pricingEntries = await getCollection('pricing');
+const pricingContent = pricingEntries[0]?.data;
+
+// Map CMS tiers to the format the template expects
+const plans = pricingContent?.tiers?.map((tier: any) => ({
+  name: tier.name,
+  price: tier.price,
+  period: tier.period,
+  description: tier.description,
+  features: tier.features.filter((f: any) => f.included).map((f: any) => f.text),
+  cta: tier.ctaText,
+  highlighted: tier.highlighted,
+  // Icons based on plan name
+  icon: `/images/wp-content/uploads/2025/02/vivaspot-${tier.name.toLowerCase()}-icon-for-web${tier.name === 'Free' ? '-1' : tier.name === 'Marketer' ? 'site' : 'site'}.png`,
+})) || [
+  {
+    name: 'Free',
+    price: '$0',
+    period: '/month',
+    description: 'Get started with no-hassle guest WiFi.',
+    features: [
+      'No-hassle guest WiFi',
+      'Branded splash page',
+      'Basic email collection',
+      'Weekly reports',
+    ],
+    cta: 'Start Free',
+    highlighted: false,
+    icon: '/images/wp-content/uploads/2025/02/vivaspot-free-icon-for-web-1.png',
+  },
+];
+
+// Icon mapping for plans
+const iconMap: Record<string, string> = {
+  'Free': '/images/wp-content/uploads/2025/02/vivaspot-free-icon-for-web-1.png',
+  'Basic': '/images/wp-content/uploads/2025/02/vivaspot-basic-icon-for-website.png',
+  'Marketer': '/images/wp-content/uploads/2025/02/vivaspot-marketing-icon-for-website.png',
+  'Plus': '/images/wp-content/uploads/2025/02/vivaspot-plus-icon-for-website.png',
+  'Pro': '/images/wp-content/uploads/2025/02/vivaspot-pro-icon-for-website.png',
+};
+
+// Add proper icons to plans
+plans.forEach((plan: any) => {
+  plan.icon = iconMap[plan.name] || plan.icon;
+});
+
+const faqs = pricingContent?.faq?.map((faq: any) => ({
+  q: faq.question,
+  a: faq.answer,
+})) || [
+  {
+    q: 'What counts as a guest login?',
+    a: 'A guest login is counted each time a unique user connects to your WiFi through the VivaSpot splash page within a calendar month.',
+  },
+];
+
+// Page header content from CMS
+const headline = pricingContent?.headline || 'Simple pricing that grows with you';
+const subheadline = pricingContent?.subheadline || 'Start free and upgrade as your business grows. No hidden fees, no contracts.';
+
+// FAQ Schema for SEO
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a
+    }
+  }))
+};
+---
+
+<BaseLayout title="Pricing - Simple Plans for Every Business">
+  <!-- FAQ Schema for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Hero Section -->
+  <section class="pricing-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <span class="hero-tag">Pricing</span>
+      <h1 class="hero-title">{headline}</h1>
+      <p class="hero-subtitle">
+        {subheadline}
+      </p>
+    </div>
+  </section>
+
+  <!-- Pricing Cards -->
+  <section class="pricing-section">
+    <div class="pricing-container">
+      <div class="pricing-grid">
+        {plans.map((plan, i) => (
+          <div
+            class:list={['pricing-card', { highlighted: plan.highlighted }]}
+            style={`--delay: ${i * 0.1}s`}
+          >
+            {plan.highlighted && <span class="popular-badge">Most Popular</span>}
+            <div class="card-header">
+              <OptimizedImage src={plan.icon} alt={plan.name} width={56} height={56} class="plan-icon" />
+              <h2 class="plan-name">{plan.name}</h2>
+              <div class="plan-price">
+                <span class="price">{plan.price}</span>
+                <span class="period">{plan.period}</span>
+              </div>
+              <p class="plan-description">{plan.description}</p>
+            </div>
+            <ul class="features-list">
+              {plan.features.map((feature) => (
+                <li class="feature-item">
+                  <svg viewBox="0 0 20 20" fill="currentColor" class="check-icon">
+                    <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <a
+              href="/contact"
+              class:list={['plan-cta', { 'cta-highlighted': plan.highlighted }]}
+            >
+              {plan.cta}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <div class="faq-container">
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div class="faq-item">
+            <h3 class="faq-question">{faq.q}</h3>
+            <p class="faq-answer">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2 class="cta-title">Still have questions?</h2>
+      <p class="cta-text">
+        Our team is here to help you find the right plan for your business.
+      </p>
+      <div class="cta-buttons">
+        <a href="/contact" class="cta-btn-primary">Contact Sales</a>
+        <a href="tel:1-855-383-4662" class="cta-btn-secondary">Call 1-855-383-4662</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero Section */
+  .pricing-hero {
+    position: relative;
+    background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
+    padding: 3rem 0 7rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(230, 74, 25, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(230, 74, 25, 0.04) 0%, transparent 40%);
+  }
+
+  .hero-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange-500);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease 0.1s forwards;
+    opacity: 0;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    color: var(--charcoal-light);
+    max-width: 500px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  /* Pricing Section */
+  .pricing-section {
+    background: var(--cream);
+    padding: 0 0 3rem;
+    margin-top: -5rem;
+  }
+
+  .pricing-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .pricing-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .pricing-grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  .pricing-card {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.5s ease var(--delay) forwards;
+    opacity: 0;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  }
+
+  .pricing-card.highlighted {
+    background: var(--charcoal);
+    color: white;
+    transform: scale(1.02);
+  }
+
+  @media (min-width: 1024px) {
+    .pricing-card.highlighted {
+      transform: scale(1.05);
+    }
+
+    .pricing-card.highlighted:hover {
+      transform: scale(1.05) translateY(-8px);
+    }
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: white;
+    background: var(--orange-500);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    white-space: nowrap;
+  }
+
+  .card-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .highlighted .card-header {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .plan-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    object-fit: contain;
+  }
+
+  .plan-name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+  }
+
+  .highlighted .plan-name {
+    color: white;
+  }
+
+  .plan-price {
+    margin-bottom: 0.5rem;
+  }
+
+  .price {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--charcoal);
+  }
+
+  .highlighted .price {
+    color: white;
+  }
+
+  .period {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--charcoal-light);
+  }
+
+  .highlighted .period {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .plan-description {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--charcoal-light);
+    line-height: 1.5;
+  }
+
+  .highlighted .plan-description {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .features-list {
+    flex: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--charcoal-light);
+    line-height: 1.4;
+  }
+
+  .highlighted .feature-item {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .check-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--orange-500);
+    margin-top: 1px;
+  }
+
+  .highlighted .check-icon {
+    color: var(--orange-500);
+  }
+
+  .plan-cta {
+    display: block;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.875rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: var(--cream);
+    color: var(--charcoal);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .plan-cta:hover {
+    background: var(--orange-500);
+    color: white;
+    border-color: var(--orange-500);
+    transform: translateY(-2px);
+  }
+
+  .plan-cta.cta-highlighted {
+    background: var(--orange-500);
+    color: white;
+    border-color: var(--orange-500);
+    box-shadow: 0 4px 14px rgba(230, 74, 25, 0.3);
+  }
+
+  .plan-cta.cta-highlighted:hover {
+    background: var(--orange-600);
+    box-shadow: 0 6px 20px rgba(230, 74, 25, 0.4);
+  }
+
+  /* FAQ Section */
+  .faq-section {
+    background: white;
+    padding: 5rem 0;
+  }
+
+  .faq-container {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .faq-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .faq-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .faq-item {
+    padding: 1.5rem;
+    background: var(--cream);
+    border-radius: 12px;
+  }
+
+  .faq-question {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-answer {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--charcoal-light);
+    line-height: 1.6;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: var(--charcoal);
+    padding: 4rem 0;
+  }
+
+  .cta-container {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-btn-primary {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    background: var(--orange-500);
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(230, 74, 25, 0.3);
+  }
+
+  .cta-btn-primary:hover {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+  }
+
+  .cta-btn-secondary {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .cta-btn-secondary:hover {
+    border-color: white;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -1,0 +1,10 @@
+hero:
+  tagline: Our Blog
+  title: WiFi Marketing Insights
+  subtitle: "Expert strategies, industry trends, and actionable tips to help you grow your business with guest WiFi marketing."
+
+newsletter:
+  title: Stay in the loop
+  text: "Get the latest WiFi marketing tips and industry insights delivered to your inbox."
+  buttonText: Subscribe
+  placeholder: Enter your email

@@ -1,0 +1,66 @@
+hero:
+  headline: Turn Guest WiFi Into Your Marketing Autopilot
+  subheadline: >-
+    Capture customer contacts, automate marketing campaigns, and drive repeat
+    visits—all through the WiFi your guests are already using.
+  ctaPrimary: Start Free Trial
+  ctaPrimaryLink: /contact
+  ctaSecondary: View Pricing
+  ctaSecondaryLink: /pricing
+
+stats:
+  - value: "500+"
+    label: Businesses
+  - value: "50+"
+    label: Integrations
+  - value: "5 min"
+    label: Setup Time
+  - value: "Free"
+    label: To Start
+
+howItWorks:
+  headline: How It Works
+  subheadline: Three Steps to Marketing Autopilot
+  steps:
+    - number: "1"
+      title: Collect
+      description: >-
+        Guest connects to your WiFi and provides their email or phone number.
+        Contacts flow directly to your CRM—no manual entry needed.
+    - number: "2"
+      title: Connect
+      description: >-
+        Each visit triggers personalized emails and SMS: welcome messages,
+        birthday offers, win-back campaigns, and review requests.
+    - number: "3"
+      title: Convert
+      description: >-
+        Targeted offers drive return visits, build loyalty, and increase
+        customer lifetime value—all on autopilot.
+
+features:
+  tagline: Powerful Features
+  headline: More Than Just WiFi
+  items:
+    - stat: "98%"
+      title: SMS Marketing
+      description: >-
+        Text campaigns with near-perfect open rates. Send promotions, flash
+        sales, and reminders that customers actually read.
+    - stat: "2.3x"
+      title: Loyalty & Rewards
+      description: >-
+        Create exclusive clubs for your best customers. Digital coupons,
+        birthday rewards, and VIP perks that drive repeat visits.
+    - stat: "40%"
+      title: Foot Traffic Analytics
+      description: >-
+        See exactly how many customers visit, how often they return, and which
+        campaigns drive the most traffic.
+
+finalCta:
+  headline: Ready to transform your guest WiFi?
+  subheadline: >-
+    Start your free trial today and see results in minutes, not months.
+  buttonText: Get Started Free
+  buttonLink: /contact

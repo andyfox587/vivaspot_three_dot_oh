@@ -1,0 +1,47 @@
+---
+/**
+ * OptimizedImage Component
+ *
+ * Provides optimized image loading with:
+ * - Lazy loading by default (configurable for above-fold images)
+ * - Width/height to prevent CLS (Cumulative Layout Shift)
+ * - decoding="async" for performance
+ * - fetchpriority for critical images
+ * - Proper alt text for accessibility
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  priority?: boolean;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  priority = false,
+} = Astro.props;
+
+// For priority images (above the fold), use eager loading and high fetchpriority
+const loadingAttr = priority ? 'eager' : loading;
+const fetchPriority = priority ? 'high' : 'auto';
+---
+
+<img
+  src={src}
+  alt={alt}
+  width={width}
+  height={height}
+  class={className}
+  loading={loadingAttr}
+  decoding="async"
+  fetchpriority={fetchPriority}
+/>

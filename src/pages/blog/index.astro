@@ -1,0 +1,377 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '../../utils/readingTime';
+
+const allPosts = await getCollection('blog');
+// Only show published posts on the live site
+const posts = allPosts
+  .filter(p => p.data.published)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Get unique categories from published posts only
+const allCategories = [...new Set(posts.flatMap(p => p.data.categories))].sort();
+
+// Load blog page content from Keystatic
+const blogPageContent = await getCollection('blog-page');
+const pageContent = blogPageContent[0]?.data ?? {
+  hero: { tagline: 'Our Blog', title: 'WiFi Marketing Insights', subtitle: '' },
+  newsletter: { title: 'Stay in the loop', text: '', buttonText: 'Subscribe', placeholder: 'Enter your email' }
+};
+---
+
+<BaseLayout title={`Blog - ${pageContent.hero.title}`}>
+  <!-- Hero Section -->
+  <section class="blog-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <span class="hero-tag">{pageContent.hero.tagline}</span>
+      <h1 class="hero-title">{pageContent.hero.title}</h1>
+      <p class="hero-subtitle">
+        {pageContent.hero.subtitle}
+      </p>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 80L60 70C120 60 240 40 360 30C480 20 600 20 720 25C840 30 960 40 1080 45C1200 50 1320 50 1380 50L1440 50V80H1380C1320 80 1200 80 1080 80C960 80 840 80 720 80C600 80 480 80 360 80C240 80 120 80 60 80H0Z" fill="var(--cream)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Blog Content -->
+  <section class="blog-content">
+    <div class="content-container">
+      <!-- Category Filter -->
+      <div class="category-filter">
+        <button class="filter-btn active" data-category="all">
+          All Posts
+        </button>
+        {allCategories.map((cat) => (
+          <button class="filter-btn" data-category={cat}>
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Posts Grid -->
+      <div class="posts-grid">
+        {posts.map((post, i) => (
+          <div class="post-item" style={`--delay: ${i * 0.05}s`} data-categories={post.data.categories.join(',')}>
+            <BlogCard
+              title={post.data.title}
+              excerpt={post.data.excerpt}
+              slug={post.id}
+              date={post.data.date}
+              featuredImage={post.data.featuredImage}
+              categories={post.data.categories}
+              readingTime={getReadingTime(post.body || '')}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <div class="newsletter-content">
+        <h2 class="newsletter-title">{pageContent.newsletter.title}</h2>
+        <p class="newsletter-text">
+          {pageContent.newsletter.text}
+        </p>
+      </div>
+      <form class="newsletter-form">
+        <input
+          type="email"
+          placeholder={pageContent.newsletter.placeholder}
+          class="newsletter-input"
+          required
+        />
+        <button type="submit" class="newsletter-btn">
+          {pageContent.newsletter.buttonText}
+        </button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const postItems = document.querySelectorAll('.post-item');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const category = btn.getAttribute('data-category');
+
+      postItems.forEach(item => {
+        const categories = item.getAttribute('data-categories')?.split(',') || [];
+
+        if (category === 'all' || categories.includes(category)) {
+          item.style.display = 'block';
+          item.style.animation = 'fadeInUp 0.4s ease forwards';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Hero Section */
+  .blog-hero {
+    position: relative;
+    background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
+    padding: 4rem 0 3rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(230, 74, 25, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba(230, 74, 25, 0.04) 0%, transparent 40%);
+  }
+
+  .hero-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange-500);
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 1.25rem;
+    animation: fadeInUp 0.6s ease 0.1s forwards;
+    opacity: 0;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--charcoal-light);
+    max-width: 600px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  .hero-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    line-height: 0;
+  }
+
+  .hero-wave svg {
+    width: 100%;
+    height: 40px;
+  }
+
+  /* Blog Content */
+  .blog-content {
+    background: var(--cream);
+    padding: 3rem 0 5rem;
+  }
+
+  .content-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Category Filter */
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    animation: fadeIn 0.5s ease 0.3s forwards;
+    opacity: 0;
+  }
+
+  .filter-btn {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--charcoal-light);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0.625rem 1.25rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .filter-btn:hover {
+    color: var(--charcoal);
+    border-color: var(--orange-500);
+  }
+
+  .filter-btn.active {
+    background: var(--orange-500);
+    color: white;
+    border-color: var(--orange-500);
+  }
+
+  /* Posts Grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .post-item {
+    animation: fadeInUp 0.5s ease var(--delay) forwards;
+    opacity: 0;
+  }
+
+  /* Newsletter Section */
+  .newsletter-section {
+    background: var(--charcoal);
+    padding: 4rem 0;
+  }
+
+  .newsletter-container {
+    max-width: 50rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .newsletter-container {
+      flex-direction: row;
+      text-align: left;
+    }
+  }
+
+  .newsletter-content {
+    flex: 1;
+  }
+
+  .newsletter-title {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter-text {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .newsletter-form {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .newsletter-input {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    padding: 0.875rem 1.25rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .newsletter-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--orange-500);
+  }
+
+  .newsletter-btn {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.875rem 1.5rem;
+    background: var(--orange-500);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+  }
+
+  .newsletter-btn:hover {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>

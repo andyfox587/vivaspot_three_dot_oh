@@ -1,0 +1,275 @@
+---
+const currentYear = new Date().getFullYear();
+
+const footerLinks = {
+  product: [
+    { label: 'Features', href: '/features' },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'Getting Started', href: '/getting-started' },
+    { label: 'Coupon Book', href: '/deals' },
+  ],
+  company: [
+    { label: 'Blog', href: '/blog' },
+    { label: 'Partners', href: '/partners' },
+    { label: 'Book a Meeting', href: '/book-a-meeting' },
+    { label: 'Contact', href: '/contact' },
+  ],
+};
+---
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">
+            <img
+              src="/images/wp-content/uploads/2023/09/vivaspot-logo-website-120x95-1.png"
+              alt="VivaSpot"
+              class="footer-logo-image"
+            />
+          </a>
+          <p class="footer-tagline">
+            Turn your guest WiFi into a powerful marketing engine. Capture leads, build loyalty, and drive revenue automatically.
+          </p>
+          <div class="social-links">
+            <a href="https://facebook.com/vivaspot" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3V2z" />
+              </svg>
+            </a>
+            <a href="https://twitter.com/vivaspot" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0 0 23 3z" />
+              </svg>
+            </a>
+            <a href="https://linkedin.com/company/vivaspot" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Links Columns -->
+        <div class="footer-links-group">
+          <div class="footer-column">
+            <h4 class="footer-heading">Product</h4>
+            <ul class="footer-list">
+              {footerLinks.product.map((link) => (
+                <li>
+                  <a href={link.href} class="footer-link">{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h4 class="footer-heading">Company</h4>
+            <ul class="footer-list">
+              {footerLinks.company.map((link) => (
+                <li>
+                  <a href={link.href} class="footer-link">{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="footer-column">
+            <h4 class="footer-heading">Get in Touch</h4>
+            <ul class="footer-list contact-list">
+              <li>
+                <a href="mailto:support@vivaspot.com" class="footer-link contact-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  support@vivaspot.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:1-855-383-4662" class="footer-link contact-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                  1-855-383-4662
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <p class="copyright">
+        &copy; {currentYear} VivaSpot. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--charcoal);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .footer-top {
+    padding: 4rem 0 3rem;
+  }
+
+  .footer-bottom {
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1.5fr 2fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Brand column */
+  .footer-brand {
+    max-width: 320px;
+  }
+
+  .footer-logo {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-logo-image {
+    height: 45px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+  }
+
+  .footer-tagline {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 1.5rem;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+  }
+
+  .social-link:hover {
+    background: var(--orange-500);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .social-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Links group */
+  .footer-links-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .footer-links-group {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .footer-column {
+    min-width: 0;
+  }
+
+  .footer-heading {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-link {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--orange-500);
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .contact-link svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Copyright */
+  .copyright {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .copyright {
+      text-align: left;
+    }
+  }
+</style>

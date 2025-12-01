@@ -1,0 +1,592 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OptimizedImage from '../../components/OptimizedImage.astro';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '../../utils/readingTime';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  // Only generate pages for published posts
+  return posts
+    .filter(post => post.data.published)
+    .map((post) => {
+      // Clean slug from post.id (removes /index.mdx, /index.mdoc, or /index.md suffix)
+      const slug = post.id.replace(/\/index\.(mdx|mdoc|md)$/, '');
+      return {
+        params: { slug },
+        props: { post },
+      };
+    });
+}
+
+// Helper to clean slug from post.id (removes /index.mdx, /index.mdoc, or /index.md suffix)
+function cleanSlug(id: string): string {
+  return id.replace(/\/index\.(mdx|mdoc|md)$/, '');
+}
+
+const { post } = Astro.props;
+const postSlug = cleanSlug(post.id);
+
+// Render markdoc content
+const { Content } = await post.render();
+
+const formattedDate = post.data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// Calculate reading time from raw body content
+const readingTime = getReadingTime(post.body || '');
+
+// Get related posts (same category, published only)
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter(p => p.data.published && p.id !== post.id && p.data.categories.some(c => post.data.categories.includes(c)))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+// Breadcrumb schema for SEO
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://vivaspot.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://vivaspot.com/blog"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": post.data.title,
+      "item": `https://vivaspot.com/blog/${postSlug}`
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={post.data.seo?.metaTitle || post.data.title}
+  description={post.data.seo?.metaDescription || post.data.excerpt}
+  image={post.data.featuredImage}
+  type="article"
+  publishedDate={post.data.date}
+  canonicalUrl={post.data.seo?.canonicalUrl}
+  noIndex={post.data.seo?.noIndex}
+>
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <article class="article">
+    <!-- Article Header -->
+    <header class="article-header">
+      <div class="header-bg"></div>
+      <div class="header-container">
+        <a href="/blog" class="back-link">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+          </svg>
+          Back to Blog
+        </a>
+
+        <div class="article-meta">
+          {post.data.categories.length > 0 && (
+            <div class="categories">
+              {post.data.categories.map((cat: string) => (
+                <span class="category">{cat}</span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <h1 class="article-title">{post.data.title}</h1>
+
+        <div class="article-info">
+          <time datetime={post.data.date.toISOString()} class="date">
+            {formattedDate}
+          </time>
+          <span class="reading-time">{readingTime}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Featured Image -->
+    {post.data.featuredImage && (
+      <div class="featured-image-wrapper">
+        <div class="featured-image-container">
+          <OptimizedImage
+            src={post.data.featuredImage}
+            alt={post.data.title}
+            width={896}
+            height={560}
+            class="featured-image"
+            priority={true}
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Article Content -->
+    <div class="article-content">
+      <div class="content-container">
+        <div class="prose">
+          <Content />
+        </div>
+
+        <!-- Tags -->
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="tags-section">
+            <span class="tags-label">Tags:</span>
+            <div class="tags">
+              {post.data.tags.map((tag: string) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Share Section -->
+        <div class="share-section">
+          <span class="share-label">Share this article:</span>
+          <div class="share-links">
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.url.href)}`} target="_blank" rel="noopener" class="share-link twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0 0 23 3z" />
+              </svg>
+            </a>
+            <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(Astro.url.href)}&title=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener" class="share-link linkedin">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+              </svg>
+            </a>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.href)}`} target="_blank" rel="noopener" class="share-link facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3V2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Posts -->
+    {relatedPosts.length > 0 && (
+      <section class="related-section">
+        <div class="related-container">
+          <h2 class="related-title">Related Articles</h2>
+          <div class="related-grid">
+            {relatedPosts.map((relatedPost) => (
+              <a href={`/blog/${cleanSlug(relatedPost.id)}`} class="related-card">
+                {relatedPost.data.featuredImage && (
+                  <div class="related-image">
+                    <OptimizedImage
+                      src={relatedPost.data.featuredImage}
+                      alt={relatedPost.data.title}
+                      width={400}
+                      height={250}
+                    />
+                  </div>
+                )}
+                <div class="related-content">
+                  <h3 class="related-card-title">{relatedPost.data.title}</h3>
+                  <time class="related-date">
+                    {relatedPost.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </time>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2 class="cta-title">Ready to boost your WiFi marketing?</h2>
+        <p class="cta-text">
+          Start capturing guest data and driving revenue with VivaSpot today.
+        </p>
+        <a href="/contact" class="cta-btn">Get Started Free</a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  /* Article Header */
+  .article-header {
+    position: relative;
+    background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
+    padding: 4rem 0 3rem;
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(230, 74, 25, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba(230, 74, 25, 0.03) 0%, transparent 40%);
+  }
+
+  .header-container {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--charcoal-light);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--orange-500);
+  }
+
+  .back-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .article-meta {
+    margin-bottom: 1rem;
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .category {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--orange-500);
+    background: rgba(230, 74, 25, 0.1);
+    padding: 0.4rem 0.875rem;
+    border-radius: 50px;
+  }
+
+  .article-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.25rem;
+  }
+
+  .article-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--charcoal-light);
+  }
+
+  .date, .reading-time {
+    display: flex;
+    align-items: center;
+  }
+
+  .reading-time::before {
+    content: '•';
+    margin-right: 1.5rem;
+    color: var(--charcoal-light);
+    opacity: 0.5;
+  }
+
+  /* Featured Image */
+  .featured-image-wrapper {
+    background: var(--cream);
+    padding: 0 1.5rem;
+  }
+
+  .featured-image-container {
+    max-width: 56rem;
+    margin: 0 auto;
+    margin-top: -2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .featured-image {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Article Content */
+  .article-content {
+    background: var(--cream);
+    padding: 3rem 0 4rem;
+  }
+
+  .content-container {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Tags */
+  .tags-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .tags-label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--charcoal-light);
+    background: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  /* Share Section */
+  .share-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .share-label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .share-links {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .share-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--charcoal-light);
+    transition: all 0.3s ease;
+  }
+
+  .share-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .share-link.twitter:hover {
+    background: #1DA1F2;
+    color: white;
+    border-color: #1DA1F2;
+  }
+
+  .share-link.linkedin:hover {
+    background: #0A66C2;
+    color: white;
+    border-color: #0A66C2;
+  }
+
+  .share-link.facebook:hover {
+    background: #1877F2;
+    color: white;
+    border-color: #1877F2;
+  }
+
+  .share-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Related Posts */
+  .related-section {
+    background: white;
+    padding: 4rem 0;
+  }
+
+  .related-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .related-title {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .related-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .related-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--cream);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .related-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .related-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .related-card:hover .related-image img {
+    transform: scale(1.05);
+  }
+
+  .related-content {
+    padding: 1.25rem;
+  }
+
+  .related-card-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .related-card:hover .related-card-title {
+    color: var(--orange-500);
+  }
+
+  .related-date {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--charcoal-light);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: var(--charcoal);
+    padding: 4rem 0;
+  }
+
+  .cta-container {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: var(--orange-500);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(230, 74, 25, 0.3);
+  }
+
+  .cta-btn:hover {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 74, 25, 0.4);
+  }
+</style>

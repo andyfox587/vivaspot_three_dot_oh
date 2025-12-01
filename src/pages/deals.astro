@@ -1,0 +1,202 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Exclusive Local Restaurant Deals - VivaSpot Coupon Book">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <span class="hero-tag">Coupon Book</span>
+      <h1 class="hero-title">Exclusive local restaurant deals</h1>
+      <p class="hero-subtitle">
+        Discover special offers and discounts from restaurants in your area. New deals added regularly.
+      </p>
+    </div>
+  </section>
+
+  <!-- Coupon Book Embed -->
+  <section class="embed-section">
+    <div class="embed-container">
+      <iframe
+        src="https://couponbook.vercel.app"
+        title="VivaSpot Coupon Book"
+        class="coupon-embed"
+        loading="lazy"
+        allow="clipboard-write"
+      ></iframe>
+    </div>
+  </section>
+
+  <!-- Business CTA -->
+  <section class="business-cta">
+    <div class="cta-container">
+      <div class="cta-content">
+        <h2 class="cta-title">Own a restaurant?</h2>
+        <p class="cta-text">
+          Get your deals featured in the Coupon Book and reach more local customers. It's included with VivaSpot.
+        </p>
+        <a href="/contact" class="cta-btn">Learn More</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    padding: 5rem 2rem 3rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--cream) 0%, #fff 50%, var(--cream-dark) 100%);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(230, 74, 25, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(230, 74, 25, 0.04) 0%, transparent 40%);
+  }
+
+  .hero-container {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--orange-500);
+    margin-bottom: 1rem;
+    animation: fadeIn 0.6s ease forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+    line-height: 1.15;
+    animation: fadeInUp 0.6s ease 0.1s forwards;
+    opacity: 0;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--charcoal-light);
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  /* Embed Section */
+  .embed-section {
+    background: white;
+    padding: 0 1rem 2rem;
+  }
+
+  .embed-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .coupon-embed {
+    width: 100%;
+    height: 800px;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+    animation: fadeInUp 0.6s ease 0.3s forwards;
+    opacity: 0;
+  }
+
+  @media (max-width: 768px) {
+    .coupon-embed {
+      height: 600px;
+      border-radius: 12px;
+    }
+  }
+
+  /* Business CTA */
+  .business-cta {
+    padding: 4rem 2rem;
+    background: var(--charcoal);
+  }
+
+  .cta-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-content {
+    text-align: center;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-text {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.875rem 2rem;
+    background: var(--orange-500);
+    color: white;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(230, 74, 25, 0.4);
+  }
+
+  .cta-btn:hover {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 74, 25, 0.5);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

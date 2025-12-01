@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* VivaSpot Brand Colors */
+:root {
+  --primary: #6366f1;
+  --secondary: #8b5cf6;
+  --accent: #06b6d4;
+  --dark: #1e1b4b;
+}
+
+/* Custom utilities */
+@layer components {
+  .btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors;
+  }
+
+  .gradient-hero {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #6366f1 100%);
+  }
+}

@@ -1,0 +1,24 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+const { title, subtitle, ctaText = 'Get Started', ctaLink = '/contact' } = Astro.props;
+---
+
+<section class="gradient-hero text-white py-20 lg:py-32">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+      {title}
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto mb-8">
+      {subtitle}
+    </p>
+    <a href={ctaLink} class="inline-block bg-white text-indigo-600 font-semibold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors text-lg">
+      {ctaText}
+    </a>
+  </div>
+</section>
