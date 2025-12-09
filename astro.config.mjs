@@ -5,12 +5,14 @@ import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
 import mdx from '@astrojs/mdx';
+import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://vivaspot.com',
-  output: 'static',
+  output: 'server',
   trailingSlash: 'ignore',
+  adapter: netlify(),
   image: {
     domains: ['vivaspot.com'],
     remotePatterns: [{ protocol: 'https' }],
