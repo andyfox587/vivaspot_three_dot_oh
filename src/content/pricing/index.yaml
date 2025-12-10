@@ -23,7 +23,7 @@ tiers:
     period: /month
     description: Essential tools for small businesses.
     highlighted: false
-    ctaText: Start Free Trial
+    ctaText: Start Free
     features:
       - text: Everything in Free
         included: true
@@ -38,7 +38,7 @@ tiers:
     period: /month
     description: Advanced marketing automation.
     highlighted: false
-    ctaText: Start Free Trial
+    ctaText: Start Free
     features:
       - text: Everything in Basic
         included: true
