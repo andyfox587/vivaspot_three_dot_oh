@@ -42,16 +42,16 @@ features:
   tagline: Powerful Features
   headline: More Than Just WiFi
   items:
-    - stat: "98%"
-      title: SMS Marketing
-      description: >-
-        Text campaigns with near-perfect open rates. Send promotions, flash
-        sales, and reminders that customers actually read.
     - stat: "2.3x"
       title: Presence Marketing
       description: >-
         Market to your customers at your location or shortly after they leave.
         Digital coupons, birthday rewards, and VIP perks that drive repeat visits.
+     - stat: "98%"
+      title: SMS Marketing
+      description: >-
+        Text campaigns with near-perfect open rates. Send promotions, flash
+        sales, and reminders that customers actually read.
     - stat: "40%"
       title: Foot Traffic Analytics
       description: >-
