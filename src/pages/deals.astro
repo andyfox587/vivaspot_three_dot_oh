@@ -4,21 +4,58 @@ export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Exclusive Local Restaurant Deals - VivaSpot Coupon Book">
+<BaseLayout title="Local Deals Platform - VivaSpot">
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-container">
-      <span class="hero-tag">Coupon Book</span>
-      <h1 class="hero-title">Exclusive local restaurant deals</h1>
+      <span class="hero-tag">Local Deals Platform</span>
+      <h1 class="hero-title">The Smartest Way to Share Local Deals</h1>
       <p class="hero-subtitle">
-        Discover special offers and discounts from restaurants in your area. New deals added regularly.
+        VivaSpot's deals platform brings together restaurant owners, food influencers, and local diners—making it easy to create, distribute, and redeem offers that drive real visits.
       </p>
     </div>
   </section>
 
+  <!-- Three Audience Boxes -->
+  <section class="audience-section">
+    <div class="audience-container">
+      <div class="audience-grid">
+        <!-- Restaurant Owners -->
+        <div class="audience-card">
+          <span class="audience-tag">Restaurant Owners</span>
+          <h3 class="audience-title">Drive Foot Traffic</h3>
+          <p class="audience-text">
+            Create and distribute digital coupons in minutes. Reach new customers through our network of local foodie groups, or share directly with your own guests. Track redemptions and see exactly what's working.
+          </p>
+          <a href="/contact" class="audience-btn">Start Free</a>
+        </div>
+
+        <!-- Foodie Groups -->
+        <div class="audience-card">
+          <span class="audience-tag">Foodie Groups/Influencers</span>
+          <h3 class="audience-title">Monetize Your Audience</h3>
+          <p class="audience-text">
+            Build your own branded coupon book featuring local restaurants your followers love. Set a monthly subscription price and build your revenue stream—while helping your local community discover great deals.
+          </p>
+          <a href="/partners" class="audience-btn">Let's Partner</a>
+        </div>
+
+        <!-- Hungry Locals -->
+        <div class="audience-card">
+          <span class="audience-tag">Hungry Locals</span>
+          <h3 class="audience-title">Coupon Book w/ Local Deals</h3>
+          <p class="audience-text">
+            Subscribe to your local Foodie Group's coupon book for exclusive offers in your area. Save money at the places you already love—and find your next favorite spot. No app required.
+          </p>
+          <a href="#coupon-book" class="audience-btn">Discover Deals</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Coupon Book Embed -->
-  <section class="embed-section">
+  <section class="embed-section" id="coupon-book">
     <div class="embed-container">
       <iframe
         src="https://couponbook.vercel.app"
@@ -34,11 +71,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="business-cta">
     <div class="cta-container">
       <div class="cta-content">
-        <h2 class="cta-title">Own a restaurant?</h2>
+        <h2 class="cta-title">Ready to grow your business?</h2>
         <p class="cta-text">
-          Get your deals featured in the Coupon Book and reach more local customers. It's included with VivaSpot.
+          Whether you're a restaurant owner, foodie influencer, or hungry local—there's a place for you on VivaSpot.
         </p>
-        <a href="/contact" class="cta-btn">Learn More</a>
+        <a href="/contact" class="cta-btn">Get Started</a>
       </div>
     </div>
   </section>
@@ -62,7 +99,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .hero-container {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto;
     text-align: center;
     position: relative;
@@ -97,10 +134,107 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 1.1rem;
     color: var(--charcoal-light);
     line-height: 1.7;
-    max-width: 500px;
+    max-width: 700px;
     margin: 0 auto;
     animation: fadeInUp 0.6s ease 0.2s forwards;
     opacity: 0;
+  }
+
+  /* Audience Section */
+  .audience-section {
+    background: linear-gradient(135deg, var(--cream) 0%, #fff 100%);
+    padding: 3rem 2rem 4rem;
+  }
+
+  .audience-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .audience-card {
+    background: var(--charcoal);
+    border-radius: 20px;
+    padding: 2rem 1.75rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 0.6s ease 0.3s forwards;
+    opacity: 0;
+  }
+
+  .audience-card:nth-child(2) {
+    animation-delay: 0.4s;
+  }
+
+  .audience-card:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+
+  .audience-tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange-500);
+    margin-bottom: 0.75rem;
+  }
+
+  .audience-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .audience-text {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .audience-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    background: var(--orange-500);
+    color: white;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(230, 74, 25, 0.3);
+  }
+
+  .audience-btn:hover {
+    background: var(--orange-600);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 74, 25, 0.4);
+  }
+
+  @media (max-width: 900px) {
+    .audience-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      max-width: 450px;
+      margin: 0 auto;
+    }
   }
 
   /* Embed Section */
