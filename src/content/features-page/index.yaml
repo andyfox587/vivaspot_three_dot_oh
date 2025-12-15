@@ -17,7 +17,7 @@ sections:
       - Phone Number Capture
       - Birthday Collection
       - Branded Splash Pages
-    statValue: "35%"
+    statValue: "100%"
     statLabel: Average Capture Rate
 
   - id: marketing
@@ -42,7 +42,7 @@ sections:
     title: Comprehensive Reporting - at your fingertips
     tagline: From intuitive dashboards to AI-powered insights
     description: "See which campaigns drive revenue, track customer visit patterns, and get AI recommendations for optimizing your marketing. Every dollar is tracked, every result is measurable."
-    image: /images/wp-content/uploads/2022/01/BirthdayEmailsGraphs-1024x311.png
+    image: /images/wp-content/uploads/2022/01/vivaspot_dashboard.png
     imageAlt: Analytics dashboard showing campaign performance and ROI
     highlights:
       - Real-Time Analytics
