@@ -7,7 +7,7 @@ sections:
   - id: capture
     number: "01"
     navLabel: Capture
-    title: "Capture 35% of WiFi Users—Automatically"
+    title: "Capture 100% of WiFi Users—Automatically"
     tagline: Build your marketing list while you sleep
     description: "Every WiFi login is an opportunity. VivaSpot transforms your guest WiFi into a lead generation machine—capturing emails, phone numbers, and birthdays without any extra effort from your staff."
     image: /images/wp-content/uploads/2024/09/email-collection-for-website.png
@@ -17,13 +17,13 @@ sections:
       - Phone Number Capture
       - Birthday Collection
       - Branded Splash Pages
-    statValue: "35%"
+    statValue: "100%"
     statLabel: Average Capture Rate
 
   - id: marketing
     number: "02"
     navLabel: Marketing
-    title: "98% Open Rates. Zero Manual Work."
+    title: "Automated Marketing Campaigns. Zero Manual Work."
     tagline: "The right message at the right time—automatically"
     description: "Set it and forget it. VivaSpot sends win-back campaigns to lapsed customers, birthday rewards that drive visits, and presence-triggered offers—all on autopilot."
     image: /images/wp-content/uploads/2024/09/digital-marketing-for-website.png
