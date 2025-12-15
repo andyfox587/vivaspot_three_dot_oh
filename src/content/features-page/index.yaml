@@ -1,14 +1,14 @@
 hero:
   headline: "Your WiFi is Already Generating Leads."
   headlineAccent: "You're Just Not Capturing Them."
-  subheadline: "The average business sees 500+ WiFi connections monthly. Most capture zero. VivaSpot businesses capture 35%."
+  subheadline: "The average business sees 500+ WiFi connections monthly. Use VivaSpot to capture them all."
 
 sections:
   - id: capture
     number: "01"
     navLabel: Capture
     title: "Capture 100% of WiFi Users—Automatically"
-    tagline: Build your marketing list while you sleep
+    tagline: Build your marketing list while you focus on running your business
     description: "Every WiFi login is an opportunity. VivaSpot transforms your guest WiFi into a lead generation machine—capturing emails, phone numbers, and birthdays without any extra effort from your staff."
     image: /images/wp-content/uploads/2024/09/email-collection-for-website.png
     imageAlt: WiFi splash page capturing customer contact information
@@ -39,7 +39,7 @@ sections:
   - id: analytics
     number: "03"
     navLabel: Analytics
-    title: Know Exactly Which Campaign Made the Sale
+    title: Comprehensive Reporting - at your fingertips
     tagline: From intuitive dashboards to AI-powered insights
     description: "See which campaigns drive revenue, track customer visit patterns, and get AI recommendations for optimizing your marketing. Every dollar is tracked, every result is measurable."
     image: /images/wp-content/uploads/2022/01/vivaspot_dashboard.png
@@ -55,14 +55,14 @@ sections:
   - id: integrations
     number: "04"
     navLabel: Integrations
-    title: Works With What You Already Have
+    title: Works With your existing ecosystem
     tagline: "Live in 5 minutes, no IT required"
     description: "VivaSpot connects seamlessly with your WiFi, POS, CRM, and email marketing tools. No hardware changes, no complex setup—just turn it on and start capturing."
     image: /images/wp-content/uploads/2024/09/gears-icon-page-for-website1.png
     imageAlt: Integration ecosystem connecting various business tools
     highlights:
       - Mailchimp & HubSpot
-      - Clover & Toast POS
+      - Clover POS
       - Cisco Meraki & Ubiquiti
       - 50+ Total Integrations
     statValue: 5 min
