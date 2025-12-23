@@ -142,7 +142,7 @@ const finalCta = homepage?.finalCta || {
                 <input
                   type="email"
                   id="wifi-email"
-                  placeholder="you@example.com"
+                  placeholder=""
                   class="portal-input"
                   required
                 />
@@ -759,7 +759,45 @@ const finalCta = homepage?.finalCta || {
     background: white;
   }
 
-  .portal-btn {
+/* Typing animation cursor */
+.portal-input.typing {
+  caret-color: transparent;
+}
+
+.portal-input.invite-mode {
+  background: linear-gradient(135deg, #fff9f5 0%, #fff 100%);
+  border-color: var(--color-orange);
+  box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.15), 0 0 20px rgba(230, 81, 0, 0.1);
+  animation: subtle-pulse 2s ease-in-out infinite;
+}
+
+.portal-input.invite-mode::placeholder {
+  color: var(--color-orange);
+  opacity: 1;
+  font-weight: 500;
+}
+
+@keyframes subtle-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.15), 0 0 20px rgba(230, 81, 0, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 0 4px rgba(230, 81, 0, 0.25), 0 0 25px rgba(230, 81, 0, 0.15);
+  }
+}
+
+/* Blinking cursor effect */
+@keyframes blink-cursor {
+  0%, 50% { border-right-color: var(--color-charcoal); }
+  51%, 100% { border-right-color: transparent; }
+}
+
+.portal-input.show-cursor {
+  border-right: 2px solid var(--color-charcoal);
+  animation: blink-cursor 1s step-end infinite;
+}
+ 
+.portal-btn {
     width: 100%;
     padding: 0.7rem;
     background: var(--color-orange);
@@ -2113,24 +2151,93 @@ const finalCta = homepage?.finalCta || {
     });
 
     // ============================================
-    // WiFi Connection Animation
+    // WiFi Connection Animation with Typing Effect
     // ============================================
-    const wifiForm = document.getElementById('wifi-form');
+    const wifiForm = document.getElementById('wifi-form') as HTMLFormElement;
     const wifiPortal = document.getElementById('wifi-portal');
     const leadCaptured = document.getElementById('lead-captured');
-    const emailInput = document.getElementById('wifi-email');
+    const emailInput = document.getElementById('wifi-email') as HTMLInputElement;
     const capturedEmail = document.getElementById('captured-email');
     const capturedBtn = document.getElementById('captured-btn');
     const portalTitle = document.getElementById('portal-title');
     const portalSubtitle = document.getElementById('portal-subtitle');
     const statNum = document.getElementById('stat-num');
     const statEmails = document.getElementById('stat-emails');
-
     const wifiIconWrap = document.getElementById('wifi-icon-wrap');
 
+    // Typing animation configuration
+    const demoEmail = "john@gmail.com";
+    const inviteText = "Try it — enter your email!";
+    const typingSpeed = 100; // ms per character
+    const pauseAfterTyping = 2000; // ms to pause after email is typed
+    const pauseAfterInvite = 3000; // ms to show invite before restarting
+    
+    let isUserInteracting = false;
+    let animationTimeout: ReturnType<typeof setTimeout>;
+
+    // Start the typing animation loop
+    function startTypingAnimation() {
+      if (isUserInteracting) return;
+      
+      emailInput.value = '';
+      emailInput.classList.remove('invite-mode');
+      emailInput.classList.add('typing', 'show-cursor');
+      emailInput.placeholder = '';
+      
+      typeEmail(0);
+    }
+
+    // Type out the demo email character by character
+    function typeEmail(index: number) {
+      if (isUserInteracting) return;
+      
+      if (index <= demoEmail.length) {
+        emailInput.value = demoEmail.substring(0, index);
+        animationTimeout = setTimeout(() => typeEmail(index + 1), typingSpeed);
+      } else {
+        // Finished typing email, pause then show invite
+        emailInput.classList.remove('show-cursor');
+        animationTimeout = setTimeout(showInvite, pauseAfterTyping);
+      }
+    }
+
+    // Show the "Try it" invite message
+    function showInvite() {
+      if (isUserInteracting) return;
+      
+      emailInput.value = '';
+      emailInput.classList.remove('typing', 'show-cursor');
+      emailInput.classList.add('invite-mode');
+      emailInput.placeholder = inviteText;
+      
+      // Pause then restart the animation
+      animationTimeout = setTimeout(startTypingAnimation, pauseAfterInvite);
+    }
+
+    // Stop animation when user interacts
+    function handleUserInteraction() {
+      isUserInteracting = true;
+      clearTimeout(animationTimeout);
+      emailInput.classList.remove('typing', 'show-cursor', 'invite-mode');
+      emailInput.placeholder = 'you@example.com';
+    }
+
+    // Set up event listeners for user interaction
+    if (emailInput) {
+      emailInput.addEventListener('focus', handleUserInteraction);
+      emailInput.addEventListener('input', handleUserInteraction);
+      
+      // Start the animation after a short delay
+      setTimeout(startTypingAnimation, 1500);
+    }
+
+    // Form submission handler
     if (wifiForm && wifiPortal && leadCaptured && wifiIconWrap) {
       wifiForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        // Stop any running animation
+        handleUserInteraction();
 
         const email = emailInput.value;
         if (!email) return;
@@ -2148,12 +2255,12 @@ const finalCta = homepage?.finalCta || {
         wifiPortal.classList.remove('connecting');
         wifiIconWrap.classList.remove('connecting');
         wifiIconWrap.classList.add('connected');
-        portalTitle.textContent = 'Connected!';
-        portalSubtitle.textContent = 'You\'re online';
+        if (portalTitle) portalTitle.textContent = 'Connected!';
+        if (portalSubtitle) portalSubtitle.textContent = "You're online";
 
         // Increment the stat counter
         if (statNum && statEmails) {
-          const currentNum = parseInt(statNum.textContent.replace(/,/g, ''));
+          const currentNum = parseInt(statNum.textContent?.replace(/,/g, '') || '0');
           statNum.textContent = (currentNum + 1).toLocaleString();
           statEmails.classList.add('incrementing');
         }
@@ -2166,7 +2273,7 @@ const finalCta = homepage?.finalCta || {
         await sleep(300);
 
         // Show captured email
-        capturedEmail.textContent = email;
+        if (capturedEmail) capturedEmail.textContent = email;
         leadCaptured.classList.add('visible');
 
         // Remove incrementing class after animation
@@ -2182,7 +2289,7 @@ const finalCta = homepage?.finalCta || {
     }
 
     // Helper function for delays
-    function sleep(ms) {
+    function sleep(ms: number) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
   });
