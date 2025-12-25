@@ -68,6 +68,38 @@ sections:
     statValue: 5 min
     statLabel: Setup Time
 
+  - id: splash-pages
+    number: "05"
+    navLabel: Splash Pages
+    title: "Create your own Splash Page"
+    tagline: "Reinforce your brand, drive actions"
+    description: "VivaSpot's splash page editor enables complete customization of your splash page so your customers get the message. Have more than one WiFi or location, Vivaspot can customize splash pages for each location."
+    image: /images/splash-screens.png
+    imageAlt: Custom branded WiFi splash pages for different businesses
+    highlights:
+      - Customized Headlines
+      - Customized Logos
+      - Customized Backgrounds
+      - Customized collection fields
+    statValue: "100%"
+    statLabel: Fully Customizable
+
+  - id: coupon-book
+    number: "06"
+    navLabel: Coupon Book
+    title: "Join our Coupon Book Network, Free"
+    tagline: "Drive foot traffic and track your ROI"
+    description: "VivaSpot's Coupon Book campaign allows you to join your local Foodie Group Coupon Book and/or VivaSpot's Coupon network at absolutely no charge. Just register for our Free tier and get your Coup-ON."
+    image: /images/Couponbook-Image.png
+    imageAlt: VivaSpot Coupon Book platform showing local restaurant deals
+    highlights:
+      - Coupon builder
+      - ROI Tracker
+      - Foodie Group Selector
+      - Redemption button
+    statValue: "FREE"
+    statLabel: No Cost to Join
+
 integrationLogos:
   - src: /images/wp-content/uploads/2024/08/mailchimp-logo-for-website.png
     name: Mailchimp
